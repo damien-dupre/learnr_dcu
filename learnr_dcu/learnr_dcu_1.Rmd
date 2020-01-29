@@ -1,0 +1,255 @@
+---
+title: "DCU R Tutorial"
+subtitle: "Become a UseR!"
+author: "by Damien Dupré"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+# options ----------------------------------------------------------------------
+base::options(
+  # htmltools.dir.version = FALSE, 
+  # knitr.kable.NA = "",
+  scipen = 999
+  )
+knitr::opts_chunk$set(
+  echo = FALSE,
+  fig.align='center'
+  )
+# libraries --------------------------------------------------------------------
+library(learnr)
+library(tidyverse)
+library(cowplot)
+```
+
+```{r learnr-references}
+## setup -----------------------------------------------------------------------
+#https://blog.rstudio.com/2017/07/11/introducing-learnr/
+#https://bookdown.org/yihui/rmarkdown/learnr-start.html
+#https://teachdatascience.com/learnr/
+#https://rstudio.github.io/learnr/
+## examples --------------------------------------------------------------------
+#https://jjallaire.shinyapps.io/learnr-tutorial-01-data-basics/#section-help-pages
+#https://r.qhelp.eu/Glasgow/Learnr_regression/app/#section-linear-regression
+#https://rpruim.shinyapps.io/Less-Volume-JMM2019/#section-us-births-in-1978
+#https://raw.githubusercontent.com/rpruim/JMM2019/master/docs/less-volume/less-volume-slides.Rmd
+```
+
+```{r img1, out.width = '30%'}
+knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
+```
+
+## Introduction
+
+This tutorial is inspired by the following free online books. They are perfect for beginners, feel free to check them out for further information:
+
+- [R for Data Science](https://r4ds.had.co.nz/) by Wickham and Grolemund (2017)
+- [A ModernDive into R and the tidyverse](https://moderndive.com/) by Ismay and Kim (2019)
+- [Learning statistics with R](https://learningstatisticswithr.com/book/) by Navarro (2019)
+- [Getting Used to R, RStudio, and R Markdown](https://rbasics.netlify.com/) by Kennedy (2019)
+- [Statistical Thinking for the 21st Century](https://statsthinking21.org/) by Poldrack (2020)
+
+## Chapter 1: Getting started with R
+
+Before starting, there are some key concepts you need to understand and to remember:
+
+1. What are **R** and **RStudio**?
+2. How do I **code** in R?
+3. What are **R packages**?
+
+### What are **R** and **RStudio**?
+
+R is a real programming language and has become one of the most popular programming languages for statistical analysis and “data science”. Unlike general-purpose programming languages such as Python or Java, R is purpose-built for statistics. That doesn’t mean that you can’t do more general things with it, but the place where it really shines is in data analysis and statistics.
+
+R is usually used via RStudio and First time users often confuse the two. At its simplest, **R is like a car’s engine** while **RStudio is like a car’s dashboard**.
+
+```{r img2, fig.show = "hold", out.width = "50%", fig.align = "default", fig.cap="R: The engine (left); RStudio: The dashboard (right)"}
+
+knitr::include_graphics("https://images.pexels.com/photos/159293/car-engine-motor-clean-customized-159293.jpeg")
+knitr::include_graphics("https://images.pexels.com/photos/1009871/pexels-photo-1009871.jpeg")
+```
+
+More precisely, **R is a programming language that runs computations**, while **RStudio is an integrated development environment (IDE) that provides an interface** by adding many convenient features and tools. So just as the way of having access to a speedometer, rearview mirrors, and a navigation system makes driving much easier, using RStudio’s interface makes using R much easier as well.
+
+For now, we are going to use R via a server not with RStudio but the presentation of RStudio and how to use RStudio will be introduced at the end of this tutorial.
+
+### How do I **code** in R?
+
+While it is not required to be an expert computer programmer to use R, there is still a set of basic programming concepts that new R users need to understand.
+
+To help you learn, we will always use a different font to distinguish regular text from `computer_code`. The best way to master these topics is through deliberate practice with R and lots of repetition.
+
+One thing that intimidates new R and RStudio users is how it reports **errors**, **warnings**, and **messages**. R reports errors, warnings, and messages in a glaring red font, which makes it seem like it is scolding you. However, seeing red text in the console is not always bad.
+
+- If the text starts with **“Error”**, figure out what’s causing it. Think of errors as a red traffic light: something is wrong!
+- If the text starts with **“Warning”**, figure out if it’s something to worry about. Think of warnings as a yellow traffic light: everything is working fine, but watch out/pay attention.
+- Otherwise, the text is just a **message**. Read it, wave back at R, and thank it for talking to you. Think of messages as a green traffic light: everything is working fine and keep on going!
+
+Learning to code/program is quite similar to learning a foreign language. It can be daunting and frustrating at first. Such frustrations are common and it is normal to feel discouraged as you learn. However, just as with learning a foreign language, if you put in the effort and are not afraid to make mistakes, anybody can learn and improve.
+
+Here are a few useful tips to keep in mind as you learn to program:
+
+1. **Remember that computers are not actually that smart**: The instructions you give your computer can’t have any mistakes in them, nor can they be ambiguous in any way.
+2. **Take the “copy, paste, and tweak” approach**: It is often much easier to take existing code that you know works and modify it to suit your ends.
+3. **The best way to learn to code is by doing**: Rather than learning to code for its own sake, we find that learning to code goes much smoother when you have a goal in mind or when you are working on a particular project, like analyzing data that you are interested in and that is important to you.
+4. **Practice is key**: Just as the only method to improve your foreign language skills is through lots of practice and speaking, the only method to improving your coding skills is through lots of practice.
+
+### What are **R packages**?
+
+Another point of confusion with many new R users is the idea of an R package. R packages extend the functionality of R by providing additional functions, data, and documentation. They are written by a worldwide community of R users and can be downloaded for free from the internet.
+
+A good analogy for **R packages are like apps you can download onto a mobile phone**.
+
+```{r img3, fig.show = "hold", out.width = "50%", fig.align = "default", fig.cap="R: A new phone (left); R Packages: Apps you can download (right)"}
+
+knitr::include_graphics("https://images.pexels.com/photos/47261/pexels-photo-47261.jpeg")
+knitr::include_graphics("https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg")
+```
+
+So R is like a new mobile phone: while it has a certain amount of features when you use it for the first time, it doesn’t have everything. R packages are like the apps you can download onto your phone from Apple’s App Store or Android’s Google Play.
+
+Let’s continue this analogy by considering the Instagram app for editing and sharing pictures. Say you have purchased a new phone and you would like to share a photo you have just taken with friends on Instagram. You need to:
+
+- **Install the app**: Since your phone is new and does not include the Instagram app, you need to download the app from either the App Store or Google Play. You do this once and you’re set for the time being. You might need to do this again in the future when there is an update to the app.
+- **Open the app**: After you’ve installed Instagram, you need to open it.
+
+Once Instagram is open on your phone, you can then proceed to share your photo with your friends and family. The process is very similar for using an R package. You need to:
+
+- **Install the package**: This is like installing an app on your phone. Most packages are not installed by default when you install R and RStudio. Thus if you want to use a package for the first time, you need to install it first. Once you’ve installed a package, you likely won’t install it again unless you want to update it to a newer version.
+- **“Load” the package**: “Loading” a package is like opening an app on your phone. Packages are not “loaded” by default when you start RStudio on your computer; you need to “load” each package you want to use every time you start RStudio.
+
+To use a package that has been installed, you need to “load it.” In other words, you need to “open it.” We do this by using the `library()` command. 
+
+For example, to load the `ggplot2` package, run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box.
+
+```{r package, exercise=TRUE}
+library(ggplot2)
+```
+
+Note: the package has already been loaded for you and will not generate any message.
+
+### What’s to come?
+
+As for a foreign language, before writing poems one has to learn the vocabulary and grammar and this is exactly what we have to do with R.
+
+## Chapter 2: Coding basics
+
+### Arithmetic operations
+
+Let’s review some basics we’ve so far omitted in the interests of getting you plotting as quickly as possible. You can use R as a calculator.
+
+|Operator |Description             |
+|---------|------------------------|
+|+        |addition                |
+|-        |subtraction             |
+|*        |multiplication          |
+|/        |division                |
+
+Run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box.
+
+```{r calculator, exercise=TRUE}
+1 / 200 * 30
+
+(59 + 73 + 2) / 3
+
+sin(pi / 2)
+```
+
+R spits out the answer to whatever you type in, as long as it can figure it out.
+
+### Logical operations
+
+Another kind of variable is known as a logical variable, because it is based on the idea from logic that a statement can be either true or false. In R, these are capitalized (`TRUE` and `FALSE`).
+
+To determine whether a statement is true or not, we use logical operators. 
+
+|Operator |Description             |
+|---------|------------------------|
+|> and <  |greater than            |
+|>= and <=|greater than or equal to|
+|==       |exactly equal to        |
+|!=       |not equal to            |
+
+You are already familiar with some of these, like the greater-than (`>`) and less-than (`<`) operators. Run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box.
+
+```{r logical1, exercise=TRUE}
+1 < 3
+
+2 >= 4
+```
+
+Often we want to know whether two numbers are equal or not equal to one another. There are special operators in R to do this: `==` for equals, and `!=` for not-equals:
+
+```{r logical2, exercise=TRUE}
+3 == 3
+
+4 != 4
+```
+
+### Variables
+
+A variable is a symbol that stands for another value (just like “X” in algebra). We can create a variable by **assigning a value** to it using the `<-` operator. If we then type the name of the variable R will print out its value.
+
+```{r variable1, exercise=TRUE}
+x <- 4
+x
+```
+
+The variable now stands for the value that it contains, so we can perform operations on it and get the same answer as if we used the value itself.
+
+```{r variable2, exercise=TRUE}
+x <- 4
+
+x + 3
+
+x == 5
+```
+
+We can change the value of a variable by simply **assigning** a new value to it.
+
+```{r variable3, exercise=TRUE}
+x <- 4
+
+x <- x + 1
+x
+```
+
+All R statements where you create objects, **assignment statements**, have the same form:
+
+```{r echo=TRUE, eval=FALSE}
+object_name <- value
+```
+
+When reading that code say “object name gets value” in your head. You will make lots of **assignments** and `<-` is a pain to type.
+
+### What’s in a name?
+
+Object names must start with a letter, and can only contain letters, numbers, `_` and `.`. You want your object names to be descriptive, so you’ll need a convention for multiple words. I recommend **snake_case** where you separate lowercase words with `_`.
+
+```{r echo=TRUE, eval=FALSE}
+i_use_snake_case
+
+otherPeopleUseCamelCase
+
+some.people.use.periods
+
+And_aFew.People_RENOUNCEconvention
+```
+
+You can inspect an object by typing its name. Type the name of the variable under the code line and un the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box to display its value.
+
+```{r variable4, exercise=TRUE}
+this_is_a_really_long_name <- 2.5
+
+```
+
+Make yet another assignment and let’s try to inspect it:
+
+```{r variable5, exercise=TRUE}
+r_rocks <- 2 ^ 3
+
+R_rock
+```
+
+There’s an implied contract between you and R: it will do the tedious computation for you, but in return, you must be completely precise in your instructions. **Typos matter. Case matters**.
