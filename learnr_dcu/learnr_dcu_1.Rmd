@@ -160,7 +160,7 @@ R spits out the answer to whatever you type in, as long as it can figure it out.
 
 ### Logical operations
 
-Another kind of variable is known as a logical variable, because it is based on the idea from logic that a statement can be either true or false. In R, these are capitalized (`TRUE` and `FALSE`).
+Another kind of object is known as a logical object, because it is based on the idea from logic that a statement can be either true or false. In R, these are capitalized (`TRUE` and `FALSE`).
 
 To determine whether a statement is true or not, we use logical operators. 
 
@@ -187,18 +187,18 @@ Often we want to know whether two numbers are equal or not equal to one another.
 4 != 4
 ```
 
-### Variables
+### Objects
 
-A variable is a symbol that stands for another value (just like “X” in algebra). We can create a variable by **assigning a value** to it using the `<-` operator. If we then type the name of the variable R will print out its value.
+An object is a content that can include anything (e.g., values, dataframes, figures, models) and has a name that you have to choose. We can create an object by **assigning a value** to it using the `<-` operator. If we then type the name of the object R will print out its value.
 
-```{r variable1, exercise=TRUE}
+```{r object1, exercise=TRUE}
 x <- 4
 x
 ```
 
-The variable now stands for the value that it contains, so we can perform operations on it and get the same answer as if we used the value itself.
+The object now stands for the value that it contains, so we can perform operations on it and get the same answer as if we used the value itself.
 
-```{r variable2, exercise=TRUE}
+```{r object2, exercise=TRUE}
 x <- 4
 
 x + 3
@@ -206,9 +206,9 @@ x + 3
 x == 5
 ```
 
-We can change the value of a variable by simply **assigning** a new value to it.
+We can change the value of an object by simply **assigning** a new value to it.
 
-```{r variable3, exercise=TRUE}
+```{r object3, exercise=TRUE}
 x <- 4
 
 x <- x + 1
@@ -237,19 +237,255 @@ some.people.use.periods
 And_aFew.People_RENOUNCEconvention
 ```
 
-You can inspect an object by typing its name. Type the name of the variable under the code line and un the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box to display its value.
+You can inspect an object by typing its name. Type the name of the object under the code line and run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box to display its value.
 
-```{r variable4, exercise=TRUE}
+```{r object4, exercise=TRUE}
 this_is_a_really_long_name <- 2.5
 
 ```
 
 Make yet another assignment and let’s try to inspect it:
 
-```{r variable5, exercise=TRUE}
+```{r object5, exercise=TRUE}
 r_rocks <- 2 ^ 3
 
 R_rock
 ```
 
 There’s an implied contract between you and R: it will do the tedious computation for you, but in return, you must be completely precise in your instructions. **Typos matter. Case matters**.
+
+### Calling functions
+
+R has a large collection of built-in functions that are called like this:
+
+```{r echo=TRUE, eval=FALSE}
+function_name(arg1 = val1, arg2 = val2, ...)
+```
+
+Let’s try using the function `seq()` which makes a sequences of numbers. The first argument is called `from` and refers to the number used to start the sequence. The second argument is called `to` and refers to the last number of the sequence.
+
+Run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box to display its value.
+
+```{r seq1, exercise=TRUE}
+seq(from = 1, to = 10)
+```
+
+Fill the following code to obtain a sequence of numbers **from 5 to 20**.
+
+```{r seq2, exercise=TRUE}
+seq(from = , to = )
+```
+
+Even if it is always adviced to use argument names explicitely, it is possible to use fill the argument implicitely without argument name. In this case the arguments will be matched by position.
+
+Run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box to display its value.
+
+```{r seq3, exercise=TRUE}
+seq(1, 10)
+```
+
+The name of the function is always followed by an opening braket `(` and has to finish with a closing braket `)`.
+
+Quotation marks and parentheses must always come in a pair but it’s still possible to mess up and end up with a mismatch. If this happens, R will show you the continuation character `+`:
+
+```{r echo=TRUE, eval=FALSE}
+> x <- "hello
++
+```
+
+The `+` tells you that R is waiting for more input; it doesn’t think you’re done yet. Usually that means you’ve forgotten either a `"` or a `)`. Either add the missing pair, or press ESCAPE to abort the expression and try again.
+
+### Exercises
+
+1. Store the result of the function `seq(1, 10)` in an object with the assigment arrow and multiply this object by 2:
+
+```{r exercise1, exercise=TRUE}
+
+```
+
+2. Store the result of the function `seq(1, 10)` in an object with the assigment arrow and store the value 2 in another object with the assigment arrow. Then multiply these two objects:
+
+```{r exercise2, exercise=TRUE}
+
+```
+
+## Chapter 3: Vector basics
+
+### Introducing vectors
+
+In the final excercise of the previous section, you have seen that an object (storing the results of the `seq()` function) has more than one value. We refer to this kind of object as a vector.
+
+If you want to create your own new vector, you can do that using the `c()` function. In which case c stands for combine and will create a vector with all the elements included in the brakets:
+
+```{r echo=TRUE, eval=FALSE}
+> my_vector <- c(4, 5, 6)
+> my_vector
+[1] 4 5 6
+```
+
+You can access the individual elements within a vector by using square brackets `[]` along with a number that refers to the location within the vector. These index values start at 1, which is different from many other programming languages that start at zero. Let’s say we want to see the value in the second place of the vector:
+
+```{r}
+my_vector <- c(4, 5, 6)
+```
+
+```{r vector1, exercise=TRUE}
+my_vector[2]
+```
+
+You can also look at a range of positions, by putting the start and end locations with a colon in between:
+
+```{r echo=TRUE, eval=FALSE}
+> my_vector[2:3]
+[1] 5 6
+```
+
+You can also change the values of specific locations using the same indexing:
+
+```{r echo=TRUE, eval=FALSE}
+> my_vector[3] <- 7
+> my_vector
+[1] 4 5 7
+```
+
+### Math with vectors
+
+You can apply mathematical operations to the elements of a vector just as you would with a single number:
+
+```{r vector2, exercise=TRUE}
+my_vector <- c(4, 5, 6)
+my_vector_times_ten <- my_vector * 10
+my_vector_times_ten
+```
+
+You can also apply mathematical operations on pairs of vectors. In this case, each matching element is used for the operation.
+
+```{r vector3, exercise=TRUE}
+my_first_vector <- c(1, 2, 3)
+my_second_vector <- c(10, 20, 20)
+my_first_vector + my_second_vector
+```
+
+We can also apply logical operations across vectors; again, this will return a vector with the operation applied to the pairs of values at each position.
+
+```{r vector4, exercise=TRUE}
+vector_a <- c(1,2,3)
+vector_b <- c(1,2,4)
+vector_a == vector_b
+```
+
+Most functions will work with vectors just as they would with a single number. For example, let’s say we wanted to obtain the trigonometric sine for each of a set of values. We could create a vector and pass it to the `sin()` function, which will return as many sine values as there are input values:
+
+```{r vector5, exercise=TRUE}
+my_angle_values <- c(0, 1, 2)
+my_sin_values <- sin(my_angle_values)
+my_sin_values
+```
+
+Importantly, vectors can be made of numeric values but they can also be made of characters string between quotation marks (e.g., `"hello world"`), boolean such as `TRUE` or `FALSE`, or any kind of objects even multiple vectors. The only requirement is to respect the same type of object inside a vector.
+
+In the following example, subset the 2nd value of the vector `leinster_county`:
+
+```{r vector6, exercise=TRUE}
+leinster_county <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
+```
+
+However, functions applied to vectors have specific requirement regarding the type of elements in the vector. Try to run the following code:
+
+```{r}
+leinster_county <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
+```
+
+```{r vector7, exercise=TRUE}
+sin(leinster_county)
+```
+
+### Exercises
+
+1. Create a vector containing your age, height, and years since your leaving cert. Store the first element of this vector in a new object called `age`. Store the third element of this vector in a new object called `years_from_lc`. Subtract `age` with `years_from_lc`:
+
+```{r exercise3, exercise=TRUE}
+
+```
+
+2. Create a vector containing the names of the 4 provinces of Ireland, store this vector in an object and apply the function `nchar()` to this object:
+
+```{r exercise4, exercise=TRUE}
+
+```
+
+## Chapter 4: Data Frames
+
+Often in a dataset we will have a number of different variables that we want to work with. Instead of having a different named object that stores each one, it is often useful to combine all of the separate variables into a single object, which is referred to as a **data frame**.
+
+If you are familiar with a spreadsheet (say from Microsoft Excel) then you already have a basic understanding of a data frame.
+
+Let’s have a look at the size and population of the 12 counties in the province of Leinster. We could start by creating an object for each one, making sure that they are in the same order for each of the variables:
+
+```{r}
+leinster_county_name <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
+
+leinster_county_size <- c(896, 921, 1693, 2061, 1719, 1091, 820, 2342, 2000, 1838, 2352, 2024)
+
+leinster_county_population <- c(56932, 1347359, 222504, 99232, 84697, 40873, 128884, 195044, 77961, 88770, 149722, 142425)
+```
+
+We can then combine these into a single data frame, using the `data.frame()` function. I like to use "_df" in the names of data frames just to make clear that it’s a data frame, so we will call this one “leinster_df”:
+
+```{r}
+leinster_df <- data.frame(
+  name = leinster_county_name, 
+  size = leinster_county_size, 
+  population = leinster_county_population
+)
+```
+
+We can view the data frame by using the `View()` function or display just a sample with the `head()` function:
+
+```{r dataframe1, exercise=TRUE}
+head(leinster_df)
+```
+
+### The `$` operator
+
+Each of the columns in the data frame contains one of the variables, with the name that we gave it when we created the data frame. We can access each of those columns using the `$` operator. For example, if we wanted to access the population variable, we would combine the name of the data frame with the name of the variable as follows:
+
+```{r dataframe2, exercise=TRUE}
+leinster_df$population
+```
+
+This is just like any other vector, in that we can refer to its individual values using square brackets as we did with regular vectors:
+
+```{r dataframe3, exercise=TRUE}
+leinster_df$population[3]
+```
+
+The easiest way to obtain a value from a data frame is to only use the square brakets `[]`. Contrary to the subset of a vector, subseting a data frame involves a row number and a column number as follow `dataframe_name[row_number, col_number]`. For example:
+
+```{r dataframe4, exercise=TRUE}
+leinster_df[2, 1]
+```
+
+If one of `row_number` or `col_number` is not included, R will display all the values for the element indexed (i.e, all the rows if `row_number` is missing and all the columns if `col_number`):
+
+```{r dataframe5, exercise=TRUE}
+leinster_df[2, ]
+```
+
+```{r dataframe6, exercise=TRUE}
+leinster_df[, 1]
+```
+
+### Exercises
+
+1. Print the value of the population of County Kildare:
+
+```{r exercise5, exercise=TRUE}
+
+```
+
+2. Print the value of the size of County Kilkenny:
+
+```{r exercise6, exercise=TRUE}
+
+```
