@@ -1,0 +1,324 @@
+---
+title: "DCU R Tutorials"
+subtitle: "Data Transformation"
+author: "by Damien Dupré"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+# options ----------------------------------------------------------------------
+knitr::opts_chunk$set(
+  scipen = 999,
+  echo = FALSE,
+  mmessage = FALSE,
+  fig.align='center'
+  )
+# libraries --------------------------------------------------------------------
+library(learnr)
+library(tidyverse)
+```
+
+```{r img1, out.width = '30%'}
+knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
+```
+
+## Introduction
+
+Most people who learned R before the tidyverse have likely started to feel a nibble of pressure to get aboard the tidyverse train. While the tidyverse is primarily made up of a set of super useful R packages (ggplot2, dplyr, purrr, tidyr, readr, tibble), it is also a new way of thinking about implementing “tidy” data analysis. If you combine tidy thinking with the tidy packages, you will inevitably become a master of tidy analysis. 
+
+### Entering the tidyverse
+
+Code written in the tidyverse style is much easier to read, and is more consistent than base R (e.g. the first argument of almost every tidyverse function is the data frame on which it acts, which allows us to make heavy use of something called “piping”). Base R, on the other hand, has a somewhat inconsistent mish-mash of function and argument styles.
+
+The humans that make up the tidyverse community are amazing. Much of the initial efforts of the tidyverse were the brainchild of Hadley Wickham, but these days there are a huge number of people who contribute to, maintain, and develop the tidyverse. The tidyverse is open-source and collaborative (which means that you - yes you - could contribute to it if you wanted to), and is hosted on the tidyverse github: https://github.com/tidyverse.
+
+```{r img2, out.width = '30%'}
+knitr::include_graphics("https://tidyverse.tidyverse.org/articles/tidyverse-logo.png")
+```
+
+The goal of this tutorial is to summarise the overall goals of the tidyverse and to provide short introduction on each of the packages for data transformation.
+
+It is important to remember that the tidyverse is constantly evolving. The best ways to keep up to date with the evolving tidyverse ecosystem is (1) to follow the RStudio blog (https://blog.rstudio.com/), and (2) start following R people on twitter. Mara Averick (@dataandme) and Hadley Wickham (@hadleywickham) are good people to follow.
+
+### Tidy Data
+
+Tidy data has a simple convention: put variables in the columns and observations in the rows.
+
+```{r img3, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/tidy_data.png")
+```
+
+Right now we are going to use `dplyr` to wrangle this tidy-ish data set (the transform part of the cycle), and then come back to tidying messy data using `tidyr` once we’ve had some fun wrangling. These are both part of the `tidyverse` package.
+
+```{r img4, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/r4ds_data-science.png")
+```
+
+Conceptually, making data tidy first is really critical. Instead of building your analyses around whatever (likely weird) format your data are in, take deliberate steps to make your data tidy. When your data are tidy, you can use a growing assortment of powerful analytical and visualization tools instead of inventing home-grown ways to accommodate your data. This will save you time since you aren’t reinventing the wheel, and will make your work more clear and understandable to your collaborators (most importantly, Future You).
+
+### What’s to come?
+
+There are five **{dplyr}** functions that you will use to do the vast majority of data manipulations:
+
+- `filter()`: Subset observations (pick observations by their values)
+
+- `select()`: Subset variables (pick variables by their names)
+
+- `mutate()`: Make new variables (create new variables with functions of existing variables)
+
+- `summarise()`: Summarise data (collapse many values down to a single summary)
+
+These can all be used in conjunction with `group_by()` which changes the scope of each function from operating on the entire dataset to operating on it group-by-group. These five functions provide the verbs for a language of data manipulation.
+
+All verbs work similarly:
+
+- The first argument is a data frame object name.
+- The subsequent arguments describe what to do with the data frame. You can refer to columns in the data frame directly without using `$`.
+- The result is a new data frame.
+
+Together these properties make it easy to chain together multiple simple steps to achieve a complex result.
+
+### The gapminder dataset
+
+In February 2006, a Swedish physician and data advocate named Hans Rosling gave a TED talk titled “The best stats you’ve ever seen” where he presented global economic, health, and development data from the website [](www.gapminder.org) . 
+For this tutorial, are going to use a dataset from this website. The dataset is read with the function `read_csv()` from the {readr} package into an object called `gapminder`.
+
+```{r echo=TRUE}
+gapminder <- readr::read_csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv') 
+```
+
+Have a look at the `gapminder` object structure using the function `str()`:
+
+```{r exercise1, exercise=TRUE}
+
+```
+
+Each row in this table corresponds to a country at a specific year. For each row, we have 6 columns:
+
+- country: Name of country.
+- year: Year of the observation (between 1952 and 2007).
+- pop: Number of people living in the country.
+- continent: Which of the five continents the country is part of. Note that “Americas” includes countries in both North and South America and that Antarctica is excluded.
+- lifeExp: Life expectancy in years.
+- gdpPercap: Gross domestic product (in US dollars).
+
+Have a look at the first rows/observations of the `gapminder` object using the function `head()`:
+
+```{r exercise2, exercise=TRUE}
+
+```
+
+### References
+
+This tutorial uses contents and examples from the following free online books. They are perfect for beginners, feel free to check them out for further information:
+
+- [R for Data Science](https://r4ds.had.co.nz/) by Wickham and Grolemund (2017)
+- [A ModernDive into R and the tidyverse](https://moderndive.com/) by Ismay and Kim (2019)
+- [Learning statistics with R](https://learningstatisticswithr.com/book/) by Navarro (2019)
+- [Getting Used to R, RStudio, and R Markdown](https://rbasics.netlify.com/) by Kennedy (2019)
+- [Introduction to Open Data Science](https://ohi-science.org/data-science-training/) by the Ocean Health Index Team (2019)
+- [Statistical Thinking for the 21st Century](https://statsthinking21.org/) by Poldrack (2020)
+
+## Chapter 1: The `filter()` function
+
+```{r img6, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-filter.png")
+```
+
+You will want to isolate bits of your data; maybe you want to only look at a single country or a few years. R calls this subsetting.
+
+`filter()` is a function in the **{dplyr}** package that takes logical expressions and returns the rows for which all are TRUE. Remember your logical expressions? We’ll use `<` and `==` here.
+
+`filter()` allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the condition that filter the data frame.
+
+For example, let's filter the dataset by keeping only the values for Ireland:
+
+```{r exercise3, exercise=TRUE}
+filter(gaminder, country == "Ireland")
+```
+
+Note that column names are not between quotation marks in the Tidyverse wherease the value to filter is.
+
+### Comparisons
+
+To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: >, >=, <, <=, != (not equal), and == (equal).
+
+When you’re starting out with R, the easiest mistake to make is to use = instead of == when testing for equality. When this happens you’ll get an informative error:
+
+```{r echo=TRUE, eval=FALSE}
+filter(gapminder, country = "Ireland")
+
+> Error: `country` (`country = 1`) must not be named, do you need `==`?
+```
+
+### Logical operators
+
+Multiple arguments to `filter()` are combined with “and”: every expression must be true in order for a row to be included in the output. For other types of combinations, you’ll need to use Boolean operators yourself: `&` is “and”, `|` is “or”, and `!` is “not”. Here are the complete set of Boolean operations.
+
+```{r img10, out.width = '30%'}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/01f4b6d39d2be8269740a3ad7946faa79f7243cf/8369a/diagrams/transform-logical.png")
+```
+
+Run the following code to filter both Ireland and France data:
+
+```{r exercise4, exercise=TRUE}
+filter(gaminder, country == "Ireland" | country == "France")
+```
+
+Run the following code to filter only Ireland data without the year 2007:
+
+```{r exercise5, exercise=TRUE}
+filter(gaminder, country == "Ireland" & year != 2007)
+```
+
+### Multiple filters
+
+Whereas the `filter()` can include as many conditions as possible, it is also possible to store the result of the `filter()` function in a new object and then to apply a new filter on this new object.
+
+```{r exercise6, exercise=TRUE}
+gapminder_ireland <- filter(gaminder, country == "Ireland")
+
+gapminder_ireland_2007 <- filter(gapminder_ireland, year == 2007)
+```
+
+A choice is offered to you, you can either overwrite the original object by using the same object name or to use a different object name. In this last case, 
+
+### Exercises
+
+1. From the data frame object `gapminder`, filter the countries which population is higher than 1,000,000,000 in 2007:
+
+```{r exercise12, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder`, filter the countries in Europe which life expectancy is lower than 60 years:
+
+```{r exercise13, exercise=TRUE}
+
+```
+
+## Chapter 2: The `select()` function
+
+```{r img7, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-select.png")
+```
+
+It’s not uncommon to get datasets with hundreds or even thousands of variables. In this case, the first challenge is often narrowing in on the variables you’re actually interested in. `select()` allows you to rapidly zoom in on a useful subset using operations based on the names of the variables. Again the first argument is the name of the data frame object to process and the following arguments are the name of the columns to keep.
+
+`select()` is not terribly useful with the `gapminder` data because we only have 6 variables, but you can still get the general idea:
+
+```{r exercise7, exercise=TRUE}
+select(gapminder, country, year, pop)
+```
+
+### Keep and remove variables
+
+The `select()` function can not only be used to keep specific variables but it can also be used to remove them from the data frame object. To do so, just add the `-` sign in front of the variable name to be removed. For example:
+
+```{r exercise8, exercise=TRUE}
+gapminder_keep <- select(gapminder, country, year, pop)
+
+gapminder_remove <- select(gapminder, -continent, -lifeExp, -gdpPercap)
+
+gapminder_keep == gapminder_remove
+```
+
+In the previous example the objects `gapminder_keep` abd `gapminder_remove` should have the same number of variable and therefore be equal.
+
+### Select and rename variables
+
+While you are keeping only specify variables with `select()`, these variables can also be renamed on the same time. It is counterintuitive but the new name has to be first followed by the = sign and the old name such as:
+
+```{r exercise9, exercise=TRUE}
+select(gapminder, country, population = pop, measure_year = year)
+```
+
+### Exercises
+
+1. From the data frame object `gapminder`, select the columns `lifeExp` and `gdpPercap` and rename them as life_expenctancy and gdp_per_capita:
+
+```{r exercise14, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder`, remove the columns `pop` and `year` and assign the result in a new object. The display the value of this object:
+
+```{r exercise15, exercise=TRUE}
+
+```
+
+
+## Chapter 3: The `mutate()` function
+
+```{r img8, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-mutate.png")
+```
+
+Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. That’s the job of `mutate()`. Once again the first argument is the name of the dataframe object to modify, then the second argument is the name of the column to create followed by the `=` sign and the condition creating the new values.
+
+For example we can create a new column called `gdp_total` which contains the values resulting from the multiplication between `pop` and `gdpPercap`:
+
+```{r exercise10, exercise=TRUE}
+mutate(gapminder, gdp_total = pop * gdpPercap)
+```
+
+`mutate()` always adds new columns at the end of your dataset so we’ll start by creating a narrower dataset so we can see the new variables. `mutate()` can also create multiple columns in the same statement, they just have to be separated by a coma `,`.
+
+### Useful creation functions
+
+There are many functions for creating new variables that you can use with `mutate()`. The key property is that the function must be vectorised: it must take a vector of values as input, return a vector with the same number of values as output. There’s no way to list every possible function that you might use, but here’s a selection of functions that are frequently useful:
+
+- Arithmetic operators: `+`, `-`, `*`, `/`, `^`. 
+
+These are all vectorised, using the so called “recycling rules”. If one parameter is shorter than the other, it will be automatically extended to be the same length. This is most useful when one of the arguments is a single number or single character:
+
+```{r exercise11, exercise=TRUE}
+mutate(gapminder, number_1 = 1, letter_a = "a")
+```
+
+Arithmetic operators are also useful in conjunction with the aggregate functions you’ll learn about later. For example, `x / sum(x)` calculates the proportion of a total, and `y - mean(y)` computes the difference from the mean.
+
+- Logs: `log()`, `log2()`, `log10()`. 
+
+Logarithms are an incredibly useful transformation for dealing with data that ranges across multiple orders of magnitude. They also convert multiplicative relationships to additive, a feature we’ll come back to in modelling.
+
+- Offsets: `lead()` and `lag()`.
+
+They allow you to refer to leading or lagging values. This allows you to compute running differences (e.g. `x - lag(x)`) or find when values change (`x != lag(x)`)
+
+- Cumulative and rolling aggregates.
+
+R provides functions for running sums, products, mins and maxes: `cumsum()`, `cumprod()`, `cummin()`, `cummax()`; and {dplyr} provides `cummean()` for cumulative means.
+
+- Billions of other functions.
+
+Base R, as well as the pre-installed R packages and all the others that you can download from CRAN, github or anywhere else, have an uncountable number of functions that can be used. You can even create your own function, which is usually very helpfull.
+
+### Exercices
+
+1. From the data frame object `gapminder`, create a new column called `COUNTRY` with the function `toupper()` using the column `country`. But remember, this variable name in capital is NOT a right name in our snake_case conventions:
+
+```{r exercise16, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder`, filter the countries in Europe and their values for 2007. Assign the result to an new object called `europe_2007`. Then create a new column called `europe_prop` corresponding to the value of the column `pop` divided by the total population in Europe in 2007.
+
+```{r exercise17, exercise=TRUE}
+
+```
+
+## Chapter 4: The `summarise()` function
+
+```{r img9, out.width = '30%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-summarise.png")
+```
+
+The last key verb is `summarise()`. It collapses a data frame to a single row:
+
+```{r exercise18, exercise=TRUE}
+summarise(gapminder, m_pop = mean(pop))
+```
+
+`summarise()` is not terribly useful unless we pair it with `group_by()`. This changes the unit of analysis from the complete dataset to individual groups. Then, when you use the dplyr verbs on a grouped data frame they’ll be automatically applied “by group”. For example, if we applied exactly the same code to a data frame grouped by year, we get the average world population per year:

@@ -1,6 +1,6 @@
 ---
-title: "DCU R Tutorial"
-subtitle: "Become a UseR!"
+title: "DCU R Tutorials"
+subtitle: "WaRm Up!"
 author: "by Damien Dupré"
 output: learnr::tutorial
 runtime: shiny_prerendered
@@ -8,19 +8,16 @@ runtime: shiny_prerendered
 
 ```{r setup, include=FALSE}
 # options ----------------------------------------------------------------------
-base::options(
-  # htmltools.dir.version = FALSE, 
-  # knitr.kable.NA = "",
-  scipen = 999
-  )
 knitr::opts_chunk$set(
+  scipen = 999,
   echo = FALSE,
+  eval = TRUE,
   fig.align='center'
   )
 # libraries --------------------------------------------------------------------
 library(learnr)
 library(tidyverse)
-library(cowplot)
+library(norris)
 ```
 
 ```{r learnr-references}
@@ -42,15 +39,46 @@ knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
 
 ## Introduction
 
-This tutorial is inspired by the following free online books. They are perfect for beginners, feel free to check them out for further information:
+If you are new to R and programming, you may be intimidated by the idea of writing code. You probably aren’t used to having to type commands to tell the computer what to do. You may be more comfortable using drop-down menus and other graphical user interfaces that allow you to pick what you’d like to do. So, why are so many companies, colleges, universities, and individuals of all disciplinary backgrounds shifting towards using R?
+
+There are many answers to this question, but some of the most important are:
+
+### 1. R and RStudio are free
+
+One of the biggest perks of working with R and RStudio is that both are available free of charge. Whereas other, proprietary statistics packages are often stuck in the dark ages of development (the 1990s, for example), and can be incredibly expensive to purchase, R is a free alternative that allows users of all experience levels to contribute to its development.
+
+### 2. Analyses done using R are reproducible
+
+As many scientific fields embrace the idea of reproducible analyses, proprietary point-and-click systems actually serve as a hindrance to this process. If you need to re-run your analysis using one of these systems, you’ll need to carefully copy-and-paste your results into your text editor, potentially from beginning to end. As anyone who has done this sort of copy-and-pasting knows, this approach is both prone to errors and incredibly tedious.
+
+If, on the other hand, you use the workflows described in this tutorial, your analyses will be reproducible, thus eliminating the copy-and-paste dance. And, as you can probably guess, it is much better to be able to update your code and data inputs and then re-run all of your analysis with the push of a button than to have to worry about manually moving your results from one program to another. Reproducibility also helps you as a programmer, since your most frequent collaborator is likely to be yourself a few months or years down the road. Instead of having to carefully write down all the steps you took to find the correct drop-down menu option, your entire code is stored, and immediately reusable.
+
+### 3. Using R makes collaboration easier
+
+This approach also helps with collaboration since, as you will see later, you can share a single R Markdown file containing all of your analysis, documentation, comments, and code with others. This reduces the time needed to work with others and reduces the likelihood of errors being made in following along with point-and-click analyses. The mantra here is to Say No to Copy-And-Paste! both for your sanity and for the sake of science.
+
+### 4. Finding answers to questions is much simpler
+
+If you have ever had an issue with software, you know how difficult it can be to find answers to your questions. “How can I describe the process to someone else? Do I need to take screenshots? Do I really need to call IT and wait for hours for someone to respond?” Because R is a programming language, it is much easier (after a bit of practice) to use Google or Stack Overflow to find answers to your questions. You’ll be amazed at how many other users have encountered the same sorts of errors you will see when you begin.
+
+I frequently (almost daily) Google things like “How do I make a side-by-side boxplot in R coloring by a third variable?”. You’ll become better at working with R by reaching out to others for help and by answering questions that others have.
+
+### 5. Struggling through programming helps you learn
+
+We all know that learning isn’t easy. Do you have trouble remembering how to follow a list of more than 10 steps or so? Do you find yourself going back over and over again because you can’t remember what step comes next in the process? This is extremely common, especially if you haven’t done the procedure in awhile. Learning by following a procedure is easy in the short-term, but can be extremely frustrating to remember in the long-term. If done well, programming promotes long-term thinking to short-term fixes.
+
+### References
+
+This tutorial uses contents and examples from the following free online books. They are perfect for beginners, feel free to check them out for further information:
 
 - [R for Data Science](https://r4ds.had.co.nz/) by Wickham and Grolemund (2017)
 - [A ModernDive into R and the tidyverse](https://moderndive.com/) by Ismay and Kim (2019)
 - [Learning statistics with R](https://learningstatisticswithr.com/book/) by Navarro (2019)
 - [Getting Used to R, RStudio, and R Markdown](https://rbasics.netlify.com/) by Kennedy (2019)
+- [Introduction to Open Data Science](https://ohi-science.org/data-science-training/) by the Ocean Health Index Team (2019)
 - [Statistical Thinking for the 21st Century](https://statsthinking21.org/) by Poldrack (2020)
 
-## Chapter 1: Getting started with R
+## Chapter 1: Getting Started with R
 
 Before starting, there are some key concepts you need to understand and to remember:
 
@@ -117,23 +145,36 @@ Let’s continue this analogy by considering the Instagram app for editing and s
 Once Instagram is open on your phone, you can then proceed to share your photo with your friends and family. The process is very similar for using an R package. You need to:
 
 - **Install the package**: This is like installing an app on your phone. Most packages are not installed by default when you install R and RStudio. Thus if you want to use a package for the first time, you need to install it first. Once you’ve installed a package, you likely won’t install it again unless you want to update it to a newer version.
+
+To install a package, you need to download it from CRAN and to make it available to your R system  with the function `install.packages()`.
+
+```{r echo=TRUE, eval=FALSE}
+install.packages("norris")
+```
+
 - **“Load” the package**: “Loading” a package is like opening an app on your phone. Packages are not “loaded” by default when you start RStudio on your computer; you need to “load” each package you want to use every time you start RStudio.
 
 To use a package that has been installed, you need to “load it.” In other words, you need to “open it.” We do this by using the `library()` command. 
 
-For example, to load the `ggplot2` package, run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box.
+For example, to load the `norris` package, run the following code or hit the **Ctrl+Enter** keys (Windows) or **Cmd+Enter** (Mac) inside the code box.
 
-```{r package, exercise=TRUE}
-library(ggplot2)
+```{r package1, exercise=TRUE}
+library(norris)
 ```
 
 Note: the package has already been loaded for you and will not generate any message.
+
+Once the package is loaded you can use all the functions from this package such as:
+
+```{r package2, exercise=TRUE}
+get_random_joke()
+```
 
 ### What’s to come?
 
 As for a foreign language, before writing poems one has to learn the vocabulary and grammar and this is exactly what we have to do with R.
 
-## Chapter 2: Coding basics
+## Chapter 2: Coding Basics
 
 ### Arithmetic operations
 
@@ -185,6 +226,18 @@ Often we want to know whether two numbers are equal or not equal to one another.
 3 == 3
 
 4 != 4
+```
+
+### Missing values
+
+One important feature of R that can make comparison tricky are missing values, or `NA`s (“not availables”). `NA` represents an unknown value so missing values are “contagious”: almost any operation involving an unknown value will also be unknown.
+
+```{r exercise=TRUE}
+NA > 5
+
+NA + 10
+
+NA / 2
 ```
 
 ### Objects
@@ -309,7 +362,7 @@ The `+` tells you that R is waiting for more input; it doesn’t think you’re 
 
 ```
 
-## Chapter 3: Vector basics
+## Chapter 3: Vector Basics
 
 ### Introducing vectors
 
@@ -448,6 +501,14 @@ head(leinster_df)
 
 ### The `$` operator
 
+```{r}
+leinster_df <- data.frame(
+  name = c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow"), 
+  size = c(896, 921, 1693, 2061, 1719, 1091, 820, 2342, 2000, 1838, 2352, 2024), 
+  population = c(56932, 1347359, 222504, 99232, 84697, 40873, 128884, 195044, 77961, 88770, 149722, 142425)
+)
+```
+
 Each of the columns in the data frame contains one of the variables, with the name that we gave it when we created the data frame. We can access each of those columns using the `$` operator. For example, if we wanted to access the population variable, we would combine the name of the data frame with the name of the variable as follows:
 
 ```{r dataframe2, exercise=TRUE}
@@ -476,6 +537,23 @@ leinster_df[2, ]
 leinster_df[, 1]
 ```
 
+### Dataframe structure
+
+Because R can automatically convert type of vectors when manipulating a dataframe, it is always usfull to check its structure with the `str()` function:
+
+```{r dataframe7, exercise=TRUE}
+str(leinster_df)
+```
+
+Frist `str()` displays a summary of your object. If everything is going well we have a "data.frame" type object with 12 observations (rows) and 3 variables (columns). You can see that, as expected, size and populatiob have the class "num" for numeric. However the variable name is not a class "character" but "factor". A "factor" is a vector made of character string which are ordered according specicif level (here the alphabetical level). Whereas vectors of characters and factors are very similar, certain functions are only using one type or the other.
+
+If you want to convert a variable, use the functions `as.character()`, `as.factor()`, `as.numeric()`. For example:
+
+```{r dataframe8, exercise=TRUE}
+leinster_df$name <- as.character(leinster_df$name)
+str(leinster_df)
+```
+
 ### Exercises
 
 1. Print the value of the population of County Kildare:
@@ -489,3 +567,8 @@ leinster_df[, 1]
 ```{r exercise6, exercise=TRUE}
 
 ```
+
+## Conclusion
+
+The focus of this tutorial was primarily on introducing basic R concepts. We’ve given you what we feel is a minimally viable set of tools to explore data in R. Does this tutorial contain everything you need to know? Absolutely not. To try to include everything in this tutorial would make the tutorial so large it wouldn’t be useful! As we said earlier, the best way to add to your toolbox is to get into RStudio and run and write code as much as possible.
+

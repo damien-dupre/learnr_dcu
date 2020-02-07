@@ -1,0 +1,13 @@
+name: learnr_dcu_warm_up
+title: learnr_dcu_warm_up
+username:
+account: damien-dupre
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1776569
+bundleId: 2782075
+url: https://damien-dupre.shinyapps.io/learnr_dcu_warm_up/
+when: 1581072458.23102
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: learnr_dcu_data_transformation.Rmd
