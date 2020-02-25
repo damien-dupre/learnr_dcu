@@ -1,0 +1,27 @@
+---
+title: "DCU R Tutorials"
+subtitle: "Data Visualisation"
+author: "by Damien Dupré"
+output: learnr::tutorial
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+# options ----------------------------------------------------------------------
+knitr::opts_chunk$set(
+  scipen = 999,
+  echo = FALSE,
+  mmessage = FALSE,
+  fig.align='center'
+  )
+# libraries --------------------------------------------------------------------
+library(learnr)
+library(tidyverse)
+```
+
+```{r img1, out.width = '30%'}
+knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
+```
+
+## Introduction
+

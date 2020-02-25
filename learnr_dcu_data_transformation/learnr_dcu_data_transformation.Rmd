@@ -25,7 +25,7 @@ knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
 
 ## Introduction
 
-Most people who learned R before the tidyverse have likely started to feel a nibble of pressure to get aboard the tidyverse train. While the tidyverse is primarily made up of a set of super useful R packages (ggplot2, dplyr, purrr, tidyr, readr, tibble), it is also a new way of thinking about implementing “tidy” data analysis. If you combine tidy thinking with the tidy packages, you will inevitably become a master of tidy analysis. 
+Most people who learned R before the tidyverse have likely started to feel a nibble of pressure to get aboard the tidyverse train. While the tidyverse is primarily made up of a set of super useful R packages ({ggplot2}, {dplyr}, {purrr}, {tidyr}, {readr}, {tibble}), it is also a new way of thinking about implementing “tidy” data analysis. If you combine tidy thinking with the {tidy} packages, you will inevitably become a master of tidy analysis. 
 
 ### Entering the tidyverse
 
@@ -322,3 +322,217 @@ summarise(gapminder, m_pop = mean(pop))
 ```
 
 `summarise()` is not terribly useful unless we pair it with `group_by()`. This changes the unit of analysis from the complete dataset to individual groups. Then, when you use the dplyr verbs on a grouped data frame they’ll be automatically applied “by group”. For example, if we applied exactly the same code to a data frame grouped by year, we get the average world population per year:
+
+```{r exercise19, exercise=TRUE}
+gapminder_by_year <- group_by(gapminder, year)
+
+summarise(gapminder_by_year, m_pop = mean(pop))
+```
+
+### Exercices
+
+1. From the data frame object `gapminder`, summarise the population average with the `mean()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them):
+
+```{r exercise20, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder`, summarise the population standard deviation with the `sd()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them):
+
+```{r exercise21, exercise=TRUE}
+
+```
+
+Together `group_by()` and `summarise()` provide one of the tools that you’ll use most commonly when working with dplyr: grouped summaries. But before we go any further with this, we need to introduce a powerful new idea: **the pipe**.
+
+## Chapter 5: The **the pipe** operator `%>%` 
+
+```{r out.width = '30%'}
+knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
+```
+
+Imagine that we want to summarise the population average and standard deviation only of europe only. Using what you know about dplyr, you might write code like this:
+
+```{r echo=TRUE, eval=FALSE}
+gapminder_by_continent <- group_by(gapminder, continent)
+
+gapminder_summary_by_continent <- summarise(gapminder_by_continent, 
+  m_pop = mean(pop),
+  sd_pop = sd(pop)
+)
+
+gapminder_summary_europe <- filter(gapminder_summary_by_continent, continent == "Europe")
+```
+
+With R, there is always different ways to obtain the same result. You might also prefer the following option:
+
+```{r echo=TRUE, eval=FALSE}
+gapminder_europe <- filter(gapminder, continent == "Europe")
+
+gapminder_summary_europe <- summarise(gapminder_europe, 
+  m_pop = mean(pop),
+  sd_pop = sd(pop)
+)
+```
+
+This code is a little frustrating to write because we have to give each intermediate data frame a name, even though we don’t care about it. Naming things is hard, so this slows down our analysis.
+
+There’s another way to tackle the same problem with the pipe, `%>%`:
+
+```{r echo=TRUE, eval=FALSE}
+gapminder_summary_europe <- gapminder %>% 
+  group_by(continent) %>% 
+  summarise(
+    m_pop = mean(pop),
+    sd_pop = sd(pop)
+  ) %>% 
+  filter(continent == "Europe")
+```
+
+Or even:
+
+```{r echo=TRUE, eval=FALSE}
+gapminder_summary_europe <- gapminder %>% 
+  filter(continent == "Europe") %>% 
+  summarise(
+    m_pop = mean(pop),
+    sd_pop = sd(pop)
+  )
+```
+
+This focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarise, then filter in the first example and: filter, then summarise in the second example. As suggested by this reading, a good way to pronounce `%>%` when reading code is **“then”**.
+
+Behind the scenes, `x %>% f(y)` turns into `f(x, y)`, and `x %>% f(y) %>% g(z)` turns into `g(f(x, y), z)` and so on. You can use the pipe to rewrite multiple operations in a way that you can read left-to-right, top-to-bottom. We’ll use piping frequently from now on because it considerably improves the readability of code.
+
+The following sequence can be read as:
+1. Take x then
+2. Use this output as the input to the next function f() then
+3. Use this output as the input to the next function g() then
+4. Use this output as the input to the next function h()
+
+```{r echo=TRUE, eval=FALSE}
+x %>% 
+  f() %>% 
+  g() %>% 
+  h()
+```
+
+Working with the pipe is one of the key criteria for belonging to the tidyverse. The only exception is {ggplot2}.
+
+### Missing values
+
+If there’s any missing value in the data used for your summary, the output will be a missing value. A solution for `mean()` and `sd()` is to include the argument `na.rm = TRUE` (can be read as "the action if there is a missing value is to remove it").
+
+Let's add a missing value (NA in R) to the gapminder dataset and perform our pipe summary:
+
+```{r exercise22, exercise=TRUE}
+gapminder_with_na <- gapminder
+gapminder_with_na[gapminder_with_na$country == "Ireland", "pop"] <- NA
+
+gapminder_with_na %>% 
+  group_by(year) %>% 
+  summarise(m_pop = mean(pop))
+```
+
+To enable the calculation of the `mean()` function even if missing values are included, we just need to add the `na.rm = TRUE` argument:
+
+```{r exercise23, exercise=TRUE}
+gapminder_with_na <- gapminder
+gapminder_with_na[gapminder_with_na$country == "Ireland", "pop"] <- NA
+
+gapminder_with_na %>% 
+  group_by(year) %>% 
+  summarise(m_pop = mean(pop, na.rm = TRUE))
+```
+
+### Exercices
+
+1. From the data frame object `gapminder`, summarise the population average with the `mean()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:
+
+```{r exercise24, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder`, summarise the population standard deviation with the `sd()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:
+
+```{r exercise25, exercise=TRUE}
+
+```
+
+## Chapter 6: Pivot Longer or Wider
+
+Sometimes we need to reformat or reshape our data in order to analyze it or visualize it in a specific way. Two tidyverse functions, `pivot_longer()` and `pivot_wider()`, help us to do this.
+
+### Wider
+
+In the `gapminder` dataset, we currently have a column/variable year and the population for the same country is reapeated according multiple rows. This is a "Tidy" format, but sometimes it is handy to have a column per year for the same country: this is a "wide" format. Wide means that the value of a specific variable is spread on multiple columns.
+
+To obtain this wider version of the dataset, it is possible to use the `pivot_wider()` function from the {tidyr} package.
+
+`pivot_wider()` has 3 main arguments:
+1. The dataset to pivot (but it can be omitted if it follows a pipe operator)
+2. `names_from` which corresponds to the variable converted to column names
+3. `values_from` which corresponds to the values inside the new variables
+
+For example, the following code will spread the years as new columns displaying the population per country:
+
+```{r exercise26, exercise=TRUE}
+gapminder_wider <- gapminder %>% 
+  select(country, year, pop) %>% 
+  pivot_wider(names_from = year, values_from = pop)
+
+gapminder_wider
+```
+
+### Longer
+
+Usually R is working with long tables, not wide. For this reason it is very useful to reorganise a dataset with the `pivot_longer()` function.
+
+`pivot_longer()` has 4 main arguments:
+1. The dataset to pivot (but it can be omitted if it follows a pipe operator)
+2. `names_to` which corresponds to the column names aggreated in a new variable
+3. `values_to` which corresponds to the values aggreated in a new variable
+4. The last argument `cols` corresponds to the column names to be aggregated. Observe how we set this to `-country` indicating that we don’t want to “tidy” the country but all the other variables
+
+```{r}
+gapminder_wider <- gapminder %>% 
+  select(country, year, pop) %>% 
+  pivot_wider(names_from = year, values_from = pop)
+```
+
+```{r exercise27, exercise=TRUE}
+gapminder_longer <- gapminder_wider %>% 
+  pivot_longer(names_to = "year", values_to = "pop", cols = -country)
+
+gapminder_longer
+```
+
+Note that for `pivot_longer()` the new variable are in quotation marks because they are not present in the existing `gapminder_wider` table whereas `country` is and has no quotation mark.
+
+### Exercices
+
+1. From the data frame object `gapminder`, `pivot_wider()` the names from `country` and the values from `lifeExp`. Be careful to select only the `year`, `country`, `lifeExp` variables before pivoting:
+
+```{r exercise28, exercise=TRUE}
+
+```
+
+2. From the data frame object `gapminder_country`, `pivot_longer()` the names to `country` and the values to `lifeExp` in order to find the original data:
+
+```{r}
+gapminder_country <- gapminder %>% 
+  select(year, country, lifeExp) %>% 
+  pivot_wider(names_from = country, values_from = lifeExp)
+```
+
+```{r exercise29, exercise=TRUE}
+
+```
+
+## Conclusion
+
+Congratulations! You’ve completed the “Data Science with tidyverse” portion of this tutorial. 
+
+For the remainder of this tutorial, we’ll start every chapter by running `library(tidyverse)`, instead of loading the various component packages individually. The tidyverse “umbrella” package gets its name from the fact that all the functions in all its packages are designed to have common inputs and outputs: data frames are in “tidy” format. This standardization of input and output data frames makes transitions between different functions in the different packages as seamless as possible. For more information, check out the [tidyverse.org](tidyverse.org) webpage for the package.
+
+If you want to learn more about using the {dplyr} and {tidyr} package, we suggest that you check out [**RStudio’s Cheat Sheet**](https://rstudio.com/resources/cheatsheets/).
