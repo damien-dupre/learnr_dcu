@@ -1,8 +1,10 @@
 ---
-title: "DCU R Tutorials"
+title: "DCU R Tutorial 1"
 subtitle: "WaRm Up!"
 author: "by Damien Dupré"
-output: learnr::tutorial
+output:
+  learnr::tutorial:
+    progressive: true
 runtime: shiny_prerendered
 ---
 
@@ -18,6 +20,19 @@ knitr::opts_chunk$set(
 library(learnr)
 library(tidyverse)
 library(norris)
+
+# environement -----------------------------------------------------------------
+leinster_county <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
+
+leinster_county_size <- c(896, 921, 1693, 2061, 1719, 1091, 820, 2342, 2000, 1838, 2352, 2024)
+
+leinster_county_population <- c(56932, 1347359, 222504, 99232, 84697, 40873, 128884, 195044, 77961, 88770, 149722, 142425)
+
+leinster_df <- data.frame(
+  name = leinster_county, 
+  size = leinster_county_size, 
+  population = leinster_county_population
+)
 ```
 
 ```{r learnr-references}
@@ -232,7 +247,7 @@ Often we want to know whether two numbers are equal or not equal to one another.
 
 One important feature of R that can make comparison tricky are missing values, or `NA`s (“not availables”). `NA` represents an unknown value so missing values are “contagious”: almost any operation involving an unknown value will also be unknown.
 
-```{r exercise=TRUE}
+```{r logical3, exercise=TRUE}
 NA > 5
 
 NA + 10
@@ -378,11 +393,9 @@ If you want to create your own new vector, you can do that using the `c()` funct
 
 You can access the individual elements within a vector by using square brackets `[]` along with a number that refers to the location within the vector. These index values start at 1, which is different from many other programming languages that start at zero. Let’s say we want to see the value in the second place of the vector:
 
-```{r}
-my_vector <- c(4, 5, 6)
-```
-
 ```{r vector1, exercise=TRUE}
+my_vector <- c(4, 5, 6)
+
 my_vector[2]
 ```
 
@@ -445,10 +458,6 @@ leinster_county <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longfo
 
 However, functions applied to vectors have specific requirement regarding the type of elements in the vector. Try to run the following code:
 
-```{r}
-leinster_county <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
-```
-
 ```{r vector7, exercise=TRUE}
 sin(leinster_county)
 ```
@@ -475,7 +484,7 @@ If you are familiar with a spreadsheet (say from Microsoft Excel) then you alrea
 
 Let’s have a look at the size and population of the 12 counties in the province of Leinster. We could start by creating an object for each one, making sure that they are in the same order for each of the variables:
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 leinster_county_name <- c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow")
 
 leinster_county_size <- c(896, 921, 1693, 2061, 1719, 1091, 820, 2342, 2000, 1838, 2352, 2024)
@@ -485,7 +494,7 @@ leinster_county_population <- c(56932, 1347359, 222504, 99232, 84697, 40873, 128
 
 We can then combine these into a single data frame, using the `data.frame()` function. I like to use "_df" in the names of data frames just to make clear that it’s a data frame, so we will call this one “leinster_df”:
 
-```{r}
+```{r echo=TRUE, eval=FALSE}
 leinster_df <- data.frame(
   name = leinster_county_name, 
   size = leinster_county_size, 
@@ -500,14 +509,6 @@ head(leinster_df)
 ```
 
 ### The `$` operator
-
-```{r}
-leinster_df <- data.frame(
-  name = c("Carlow", "Dublin", "Kildare", "Kilkenny", "Laois", "Longford", "Louth", "Meath", "Offaly", "Westmeath", "Wexford", "Wicklow"), 
-  size = c(896, 921, 1693, 2061, 1719, 1091, 820, 2342, 2000, 1838, 2352, 2024), 
-  population = c(56932, 1347359, 222504, 99232, 84697, 40873, 128884, 195044, 77961, 88770, 149722, 142425)
-)
-```
 
 Each of the columns in the data frame contains one of the variables, with the name that we gave it when we created the data frame. We can access each of those columns using the `$` operator. For example, if we wanted to access the population variable, we would combine the name of the data frame with the name of the variable as follows:
 

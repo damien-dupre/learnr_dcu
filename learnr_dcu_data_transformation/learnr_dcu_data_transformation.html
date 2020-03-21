@@ -11,10 +11,10 @@
 <meta name="author" content="by Damien Dupré" />
 
 
-<meta name="progressive" content="false" />
+<meta name="progressive" content="true" />
 <meta name="allow-skip" content="false" />
 
-<title>DCU R Tutorials</title>
+<title>DCU R Tutorial 2</title>
 
 
 <!-- highlightjs -->
@@ -132,9 +132,10 @@ $(document).ready(function () {
 <div id="section-tidy-data" class="section level3">
 <h3>Tidy Data</h3>
 <p>Tidy data has a simple convention: put variables in the columns and observations in the rows.</p>
-<p><img src="https://ohi-science.org/data-science-training/img/tidy_data.png" width="30%" style="display: block; margin: auto;" /></p>
+<p><img src="https://ohi-science.org/data-science-training/img/tidy_data.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>Right now we are going to use <code>dplyr</code> to wrangle this tidy-ish data set (the transform part of the cycle), and then come back to tidying messy data using <code>tidyr</code> once we’ve had some fun wrangling. These are both part of the <code>tidyverse</code> package.</p>
-<p><img src="https://ohi-science.org/data-science-training/img/r4ds_data-science.png" width="30%" style="display: block; margin: auto;" /></p>
+<p><img src="https://ohi-science.org/data-science-training/img/r4ds_data-science.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>As a part of the {tidyverse} package, {dplyr} and {tidyr} are loaded when {tidyverse} is loaded as well:</p>
 <p>Conceptually, making data tidy first is really critical. Instead of building your analyses around whatever (likely weird) format your data are in, take deliberate steps to make your data tidy. When your data are tidy, you can use a growing assortment of powerful analytical and visualization tools instead of inventing home-grown ways to accommodate your data. This will save you time since you aren’t reinventing the wheel, and will make your work more clear and understandable to your collaborators (most importantly, Future You).</p>
 </div>
 <div id="section-whats-to-come" class="section level3">
@@ -157,33 +158,24 @@ $(document).ready(function () {
 </div>
 <div id="section-the-gapminder-dataset" class="section level3">
 <h3>The gapminder dataset</h3>
-<p>In February 2006, a Swedish physician and data advocate named Hans Rosling gave a TED talk titled “The best stats you’ve ever seen” where he presented global economic, health, and development data from the website <a href="www.gapminder.org"></a> . For this tutorial, are going to use a dataset from this website. The dataset is read with the function <code>read_csv()</code> from the {readr} package into an object called <code>gapminder</code>.</p>
-<pre class="r"><code>gapminder &lt;- readr::read_csv(&#39;https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv&#39;) </code></pre>
-<pre><code>## Parsed with column specification:
-## cols(
-##   country = col_character(),
-##   year = col_double(),
-##   pop = col_double(),
-##   continent = col_character(),
-##   lifeExp = col_double(),
-##   gdpPercap = col_double()
-## )</code></pre>
+<p>In February 2006, a Swedish physician and data advocate named Hans Rosling gave a TED talk titled “The best stats you’ve ever seen” where he presented global economic, health, and development data from the website <a href="www.gapminder.org"></a> . For this tutorial, are going to use a dataset from this website. The dataset is stored in the {gapminder} package into an object called <code>gapminder</code>. We just need to load the package to obtain the <code>gapminder</code> dataframe object:</p>
+<pre class="r"><code>library(gapminder)</code></pre>
 <p>Have a look at the <code>gapminder</code> object structure using the function <code>str()</code>:</p>
 <div class="tutorial-exercise" data-label="exercise1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Each row in this table corresponds to a country at a specific year. For each row, we have 6 columns:</p>
 <ul>
-<li>country: Name of country.</li>
-<li>year: Year of the observation (between 1952 and 2007).</li>
-<li>pop: Number of people living in the country.</li>
-<li>continent: Which of the five continents the country is part of. Note that “Americas” includes countries in both North and South America and that Antarctica is excluded.</li>
-<li>lifeExp: Life expectancy in years.</li>
-<li>gdpPercap: Gross domestic product (in US dollars).</li>
+<li><strong>country</strong>: Name of country.</li>
+<li><strong>year</strong>: Year of the observation (between 1952 and 2007).</li>
+<li><strong>pop</strong>: Number of people living in the country.</li>
+<li><strong>continent</strong>: Which of the five continents the country is part of. Note that “Americas” includes countries in both North and South America and that Antarctica is excluded.</li>
+<li><strong>lifeExp</strong>: Life expectancy in years.</li>
+<li><strong>gdpPercap</strong>: Gross domestic product (in US dollars).</li>
 </ul>
 <p>Have a look at the first rows/observations of the <code>gapminder</code> object using the function <code>head()</code>:</p>
 <div class="tutorial-exercise" data-label="exercise2" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-references" class="section level3">
@@ -201,14 +193,13 @@ $(document).ready(function () {
 </div>
 <div id="section-chapter-1-the-filter-function" class="section level2">
 <h2>Chapter 1: The <code>filter()</code> function</h2>
-<p><img src="https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-filter.png" width="30%" style="display: block; margin: auto;" /></p>
 <p>You will want to isolate bits of your data; maybe you want to only look at a single country or a few years. R calls this subsetting.</p>
 <p><code>filter()</code> is a function in the <strong>{dplyr}</strong> package that takes logical expressions and returns the rows for which all are TRUE. Remember your logical expressions? We’ll use <code>&lt;</code> and <code>==</code> here.</p>
 <p><code>filter()</code> allows you to subset observations based on their values. The first argument is the name of the data frame. The second and subsequent arguments are the condition that filter the data frame.</p>
 <p>For example, let’s filter the dataset by keeping only the values for Ireland:</p>
 <div class="tutorial-exercise" data-label="exercise3" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>filter(gaminder, country == &quot;Ireland&quot;)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<pre class="text"><code>filter(gapminder, country == &quot;Ireland&quot;)</code></pre>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Note that column names are not between quotation marks in the Tidyverse wherease the value to filter is.</p>
 <div id="section-comparisons" class="section level3">
@@ -225,23 +216,23 @@ $(document).ready(function () {
 <p><img src="https://d33wubrfki0l68.cloudfront.net/01f4b6d39d2be8269740a3ad7946faa79f7243cf/8369a/diagrams/transform-logical.png" width="30%" style="display: block; margin: auto;" /></p>
 <p>Run the following code to filter both Ireland and France data:</p>
 <div class="tutorial-exercise" data-label="exercise4" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>filter(gaminder, country == &quot;Ireland&quot; | country == &quot;France&quot;)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<pre class="text"><code>filter(gapminder, country == &quot;Ireland&quot; | country == &quot;France&quot;)</code></pre>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Run the following code to filter only Ireland data without the year 2007:</p>
 <div class="tutorial-exercise" data-label="exercise5" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>filter(gaminder, country == &quot;Ireland&quot; &amp; year != 2007)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<pre class="text"><code>filter(gapminder, country == &quot;Ireland&quot; &amp; year != 2007)</code></pre>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-multiple-filters" class="section level3">
 <h3>Multiple filters</h3>
 <p>Whereas the <code>filter()</code> can include as many conditions as possible, it is also possible to store the result of the <code>filter()</code> function in a new object and then to apply a new filter on this new object.</p>
 <div class="tutorial-exercise" data-label="exercise6" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>gapminder_ireland &lt;- filter(gaminder, country == &quot;Ireland&quot;)
+<pre class="text"><code>gapminder_ireland &lt;- filter(gapminder, country == &quot;Ireland&quot;)
 
 gapminder_ireland_2007 &lt;- filter(gapminder_ireland, year == 2007)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>A choice is offered to you, you can either overwrite the original object by using the same object name or to use a different object name. In this last case,</p>
 </div>
@@ -251,24 +242,23 @@ gapminder_ireland_2007 &lt;- filter(gapminder_ireland, year == 2007)</code></pre
 <li>From the data frame object <code>gapminder</code>, filter the countries which population is higher than 1,000,000,000 in 2007:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise12" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, filter the countries in Europe which life expectancy is lower than 60 years:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise13" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 </div>
 <div id="section-chapter-2-the-select-function" class="section level2">
 <h2>Chapter 2: The <code>select()</code> function</h2>
-<p><img src="https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-select.png" width="30%" style="display: block; margin: auto;" /></p>
 <p>It’s not uncommon to get datasets with hundreds or even thousands of variables. In this case, the first challenge is often narrowing in on the variables you’re actually interested in. <code>select()</code> allows you to rapidly zoom in on a useful subset using operations based on the names of the variables. Again the first argument is the name of the data frame object to process and the following arguments are the name of the columns to keep.</p>
 <p><code>select()</code> is not terribly useful with the <code>gapminder</code> data because we only have 6 variables, but you can still get the general idea:</p>
 <div class="tutorial-exercise" data-label="exercise7" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>select(gapminder, country, year, pop)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div id="section-keep-and-remove-variables" class="section level3">
 <h3>Keep and remove variables</h3>
@@ -278,17 +268,17 @@ gapminder_ireland_2007 &lt;- filter(gapminder_ireland, year == 2007)</code></pre
 
 gapminder_remove &lt;- select(gapminder, -continent, -lifeExp, -gdpPercap)
 
-gapminder_keep == gapminder_remove</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+all.equal(gapminder_keep, gapminder_remove)</code></pre>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>In the previous example the objects <code>gapminder_keep</code> abd <code>gapminder_remove</code> should have the same number of variable and therefore be equal.</p>
 </div>
 <div id="section-select-and-rename-variables" class="section level3">
 <h3>Select and rename variables</h3>
-<p>While you are keeping only specify variables with <code>select()</code>, these variables can also be renamed on the same time. It is counterintuitive but the new name has to be first followed by the = sign and the old name such as:</p>
+<p>While you are keeping only specify variables with <code>select()</code>, these variables can also be renamed on the same time. It is counterintuitive but the new name has to be first followed by the <code>=</code> sign and the old name such as:</p>
 <div class="tutorial-exercise" data-label="exercise9" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>select(gapminder, country, population = pop, measure_year = year)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-exercises-1" class="section level3">
@@ -297,24 +287,23 @@ gapminder_keep == gapminder_remove</code></pre>
 <li>From the data frame object <code>gapminder</code>, select the columns <code>lifeExp</code> and <code>gdpPercap</code> and rename them as life_expenctancy and gdp_per_capita:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise14" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, remove the columns <code>pop</code> and <code>year</code> and assign the result in a new object. The display the value of this object:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise15" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 </div>
 <div id="section-chapter-3-the-mutate-function" class="section level2">
 <h2>Chapter 3: The <code>mutate()</code> function</h2>
-<p><img src="https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-mutate.png" width="30%" style="display: block; margin: auto;" /></p>
 <p>Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. That’s the job of <code>mutate()</code>. Once again the first argument is the name of the dataframe object to modify, then the second argument is the name of the column to create followed by the <code>=</code> sign and the condition creating the new values.</p>
 <p>For example we can create a new column called <code>gdp_total</code> which contains the values resulting from the multiplication between <code>pop</code> and <code>gdpPercap</code>:</p>
 <div class="tutorial-exercise" data-label="exercise10" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>mutate(gapminder, gdp_total = pop * gdpPercap)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p><code>mutate()</code> always adds new columns at the end of your dataset so we’ll start by creating a narrower dataset so we can see the new variables. <code>mutate()</code> can also create multiple columns in the same statement, they just have to be separated by a coma <code>,</code>.</p>
 <div id="section-useful-creation-functions" class="section level3">
@@ -326,7 +315,7 @@ gapminder_keep == gapminder_remove</code></pre>
 <p>These are all vectorised, using the so called “recycling rules”. If one parameter is shorter than the other, it will be automatically extended to be the same length. This is most useful when one of the arguments is a single number or single character:</p>
 <div class="tutorial-exercise" data-label="exercise11" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>mutate(gapminder, number_1 = 1, letter_a = &quot;a&quot;)</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Arithmetic operators are also useful in conjunction with the aggregate functions you’ll learn about later. For example, <code>x / sum(x)</code> calculates the proportion of a total, and <code>y - mean(y)</code> computes the difference from the mean.</p>
 <ul>
@@ -352,30 +341,29 @@ gapminder_keep == gapminder_remove</code></pre>
 <li>From the data frame object <code>gapminder</code>, create a new column called <code>COUNTRY</code> with the function <code>toupper()</code> using the column <code>country</code>. But remember, this variable name in capital is NOT a right name in our snake_case conventions:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise16" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, filter the countries in Europe and their values for 2007. Assign the result to an new object called <code>europe_2007</code>. Then create a new column called <code>europe_prop</code> corresponding to the value of the column <code>pop</code> divided by the total population in Europe in 2007.</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise17" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 </div>
 <div id="section-chapter-4-the-summarise-function" class="section level2">
 <h2>Chapter 4: The <code>summarise()</code> function</h2>
-<p><img src="https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-summarise.png" width="30%" style="display: block; margin: auto;" /></p>
 <p>The last key verb is <code>summarise()</code>. It collapses a data frame to a single row:</p>
 <div class="tutorial-exercise" data-label="exercise18" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>summarise(gapminder, m_pop = mean(pop))</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p><code>summarise()</code> is not terribly useful unless we pair it with <code>group_by()</code>. This changes the unit of analysis from the complete dataset to individual groups. Then, when you use the dplyr verbs on a grouped data frame they’ll be automatically applied “by group”. For example, if we applied exactly the same code to a data frame grouped by year, we get the average world population per year:</p>
 <div class="tutorial-exercise" data-label="exercise19" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>gapminder_by_year &lt;- group_by(gapminder, year)
 
 summarise(gapminder_by_year, m_pop = mean(pop))</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <div id="section-exercices-1" class="section level3">
 <h3>Exercices</h3>
@@ -383,13 +371,13 @@ summarise(gapminder_by_year, m_pop = mean(pop))</code></pre>
 <li>From the data frame object <code>gapminder</code>, summarise the population average with the <code>mean()</code> function by <code>year</code> and by <code>continent</code> by adding the second grouping variable after the first one (use a coma to separate them):</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise20" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, summarise the population standard deviation with the <code>sd()</code> function by <code>year</code> and by <code>continent</code> by adding the second grouping variable after the first one (use a coma to separate them):</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise21" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Together <code>group_by()</code> and <code>summarise()</code> provide one of the tools that you’ll use most commonly when working with dplyr: grouped summaries. But before we go any further with this, we need to introduce a powerful new idea: <strong>the pipe</strong>.</p>
 </div>
@@ -431,59 +419,68 @@ gapminder_summary_europe &lt;- summarise(gapminder_europe,
   )</code></pre>
 <p>This focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarise, then filter in the first example and: filter, then summarise in the second example. As suggested by this reading, a good way to pronounce <code>%&gt;%</code> when reading code is <strong>“then”</strong>.</p>
 <p>Behind the scenes, <code>x %&gt;% f(y)</code> turns into <code>f(x, y)</code>, and <code>x %&gt;% f(y) %&gt;% g(z)</code> turns into <code>g(f(x, y), z)</code> and so on. You can use the pipe to rewrite multiple operations in a way that you can read left-to-right, top-to-bottom. We’ll use piping frequently from now on because it considerably improves the readability of code.</p>
-<p>The following sequence can be read as: 1. Take x then 2. Use this output as the input to the next function f() then 3. Use this output as the input to the next function g() then 4. Use this output as the input to the next function h()</p>
+<p>The following sequence can be read as: 1. Take x then 2. Use x as the input to the function f() then 3. Use f(x) as the input to the function g() then 4. Use g(f(x)) as the input to the function h()</p>
 <pre class="r"><code>x %&gt;% 
   f() %&gt;% 
   g() %&gt;% 
   h()</code></pre>
-<p>Working with the pipe is one of the key criteria for belonging to the tidyverse. The only exception is {ggplot2}.</p>
-<div id="section-missing-values" class="section level3">
-<h3>Missing values</h3>
-<p>If there’s any missing value in the data used for your summary, the output will be a missing value. A solution for <code>mean()</code> and <code>sd()</code> is to include the argument <code>na.rm = TRUE</code> (can be read as “the action if there is a missing value is to remove it”).</p>
-<p>Let’s add a missing value (NA in R) to the gapminder dataset and perform our pipe summary:</p>
+<p>Working with the pipe is one of the key criteria for belonging to the tidyverse. The only exception is {ggplot2}. <!--
+### Missing values
+
+If there’s any missing value in the data used for your summary, the output will be a missing value. A solution for `mean()` and `sd()` is to include the argument `na.rm = TRUE` (can be read as "the action if there is a missing value is to remove it").
+
+Let's add a missing value (NA in R) to the gapminder dataset and perform our pipe summary:
+
 <div class="tutorial-exercise" data-label="exercise22" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>gapminder_with_na &lt;- gapminder
-gapminder_with_na[gapminder_with_na$country == &quot;Ireland&quot;, &quot;pop&quot;] &lt;- NA
 
-gapminder_with_na %&gt;% 
-  group_by(year) %&gt;% 
-  summarise(m_pop = mean(pop))</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
-</div>
-<p>To enable the calculation of the <code>mean()</code> function even if missing values are included, we just need to add the <code>na.rm = TRUE</code> argument:</p>
+```text
+gapminder_with_na <- gapminder
+gapminder_with_na[gapminder_with_na$country == "Ireland", "pop"] <- NA
+
+gapminder_with_na %>% 
+  group_by(year) %>% 
+  summarise(m_pop = mean(pop))
+```
+
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script></div>
+
+To enable the calculation of the `mean()` function even if missing values are included, we just need to add the `na.rm = TRUE` argument:
+
 <div class="tutorial-exercise" data-label="exercise23" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>gapminder_with_na &lt;- gapminder
-gapminder_with_na[gapminder_with_na$country == &quot;Ireland&quot;, &quot;pop&quot;] &lt;- NA
 
-gapminder_with_na %&gt;% 
-  group_by(year) %&gt;% 
-  summarise(m_pop = mean(pop, na.rm = TRUE))</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
-</div>
-</div>
-<div id="section-exercices-2" class="section level3">
-<h3>Exercices</h3>
+```text
+gapminder_with_na <- gapminder
+gapminder_with_na[gapminder_with_na$country == "Ireland", "pop"] <- NA
+
+gapminder_with_na %>% 
+  group_by(year) %>% 
+  summarise(m_pop = mean(pop, na.rm = TRUE))
+```
+
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script></div>
+--> ### Exercices</p>
 <ol style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, summarise the population average with the <code>mean()</code> function by <code>year</code> and by <code>continent</code> by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise24" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, summarise the population standard deviation with the <code>sd()</code> function by <code>year</code> and by <code>continent</code> by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise25" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
-</div>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-chapter-6-pivot-longer-or-wider" class="section level2">
 <h2>Chapter 6: Pivot Longer or Wider</h2>
 <p>Sometimes we need to reformat or reshape our data in order to analyze it or visualize it in a specific way. Two tidyverse functions, <code>pivot_longer()</code> and <code>pivot_wider()</code>, help us to do this.</p>
+<p><img src="https://thinkr.fr/wp-content/uploads/pivot.png" width="50%" style="display: block; margin: auto;" /></p>
 <div id="section-wider" class="section level3">
 <h3>Wider</h3>
 <p>In the <code>gapminder</code> dataset, we currently have a column/variable year and the population for the same country is reapeated according multiple rows. This is a “Tidy” format, but sometimes it is handy to have a column per year for the same country: this is a “wide” format. Wide means that the value of a specific variable is spread on multiple columns.</p>
 <p>To obtain this wider version of the dataset, it is possible to use the <code>pivot_wider()</code> function from the {tidyr} package.</p>
+<p><img src="https://d33wubrfki0l68.cloudfront.net/8350f0dda414629b9d6c354f87acf5c5f722be43/bcb84/images/tidy-8.png" width="50%" style="display: block; margin: auto;" /></p>
 <p><code>pivot_wider()</code> has 3 main arguments: 1. The dataset to pivot (but it can be omitted if it follows a pipe operator) 2. <code>names_from</code> which corresponds to the variable converted to column names 3. <code>values_from</code> which corresponds to the values inside the new variables</p>
 <p>For example, the following code will spread the years as new columns displaying the population per country:</p>
 <div class="tutorial-exercise" data-label="exercise26" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
@@ -492,35 +489,36 @@ gapminder_with_na %&gt;%
   pivot_wider(names_from = year, values_from = pop)
 
 gapminder_wider</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 <div id="section-longer" class="section level3">
 <h3>Longer</h3>
 <p>Usually R is working with long tables, not wide. For this reason it is very useful to reorganise a dataset with the <code>pivot_longer()</code> function.</p>
+<p><img src="https://i0.wp.com/cmdlinetips.com/wp-content/uploads/2020/02/pivot_longer_wide_to_long_tidy.jpg" width="50%" style="display: block; margin: auto;" /></p>
 <p><code>pivot_longer()</code> has 4 main arguments: 1. The dataset to pivot (but it can be omitted if it follows a pipe operator) 2. <code>names_to</code> which corresponds to the column names aggreated in a new variable 3. <code>values_to</code> which corresponds to the values aggreated in a new variable 4. The last argument <code>cols</code> corresponds to the column names to be aggregated. Observe how we set this to <code>-country</code> indicating that we don’t want to “tidy” the country but all the other variables</p>
 <div class="tutorial-exercise" data-label="exercise27" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
 <pre class="text"><code>gapminder_longer &lt;- gapminder_wider %&gt;% 
   pivot_longer(names_to = &quot;year&quot;, values_to = &quot;pop&quot;, cols = -country)
 
 gapminder_longer</code></pre>
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Note that for <code>pivot_longer()</code> the new variable are in quotation marks because they are not present in the existing <code>gapminder_wider</code> table whereas <code>country</code> is and has no quotation mark.</p>
 </div>
-<div id="section-exercices-3" class="section level3">
+<div id="section-exercices-2" class="section level3">
 <h3>Exercices</h3>
 <ol style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder</code>, <code>pivot_wider()</code> the names from <code>country</code> and the values from <code>lifeExp</code>. Be careful to select only the <code>year</code>, <code>country</code>, <code>lifeExp</code> variables before pivoting:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise28" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <ol start="2" style="list-style-type: decimal">
 <li>From the data frame object <code>gapminder_country</code>, <code>pivot_longer()</code> the names to <code>country</code> and the values to <code>lifeExp</code> in order to find the original data:</li>
 </ol>
 <div class="tutorial-exercise" data-label="exercise29" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":true,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
+<script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":false,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 </div>
 </div>
@@ -534,12 +532,18 @@ If you want to learn more about using the {dplyr} and {tidyr} package, we sugges
 knitr::opts_chunk$set(
   scipen = 999,
   echo = FALSE,
-  mmessage = FALSE,
+  message = FALSE,
+  warning = FALSE,
   fig.align='center'
   )
 # libraries --------------------------------------------------------------------
 library(learnr)
 library(tidyverse)
+library(gapminder)
+# environment ------------------------------------------------------------------
+gapminder_wider <- gapminder %>% 
+  select(country, year, pop) %>% 
+  pivot_wider(names_from = year, values_from = pop)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
@@ -755,7 +759,7 @@ output$`tutorial-exercise-exercise29-output` <- renderUI({
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","broom","cellranger","cli","colorspace","compiler","crayon","curl","datasets","DBI","dbplyr","digest","dplyr","evaluate","fansi","fastmap","forcats","fs","generics","ggplot2","glue","graphics","grDevices","grid","gtable","haven","hms","htmltools","htmlwidgets","httpuv","httr","jsonlite","knitr","later","lazyeval","learnr","lifecycle","lubridate","magrittr","markdown","methods","mime","modelr","munsell","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","readxl","reprex","rlang","rmarkdown","rprojroot","rstudioapi","rvest","scales","shiny","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","tools","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.1.5","3.6.1","0.5.3.9000","1.1.0","2.0.1","1.4-1","3.6.1","1.3.4","4.3","3.6.1","1.1.0","1.4.2","0.6.23","0.8.3","0.14","0.4.1","1.0.1","0.4.0","1.3.1","0.0.2","3.2.1","1.3.1","3.6.1","3.6.1","3.6.1","0.3.0","2.2.0","0.5.3","0.4.0","1.5.1","1.5.2","1.4.1","1.6","1.27","1.0.0","0.2.2","0.10.0","0.1.0","1.7.4","1.5","1.1","3.6.1","0.8","0.1.5","0.5.0","1.4.3","2.0.3","1.1.0","0.3.3","2.4.1","1.0.3","1.3.1","1.3.1","0.3.0","0.4.4","2.1","1.3-2","0.10","0.3.5","1.1.0","1.4.0","3.6.1","1.4.5","1.4.0","2.1.3","1.0.2","1.0.0","1.3.0","3.6.1","3.6.1","0.2.2","2.1.2","0.12","1.2.2","1.8-4","2.2.0"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","broom","cellranger","cli","colorspace","compiler","crayon","datasets","DBI","dbplyr","digest","dplyr","evaluate","fansi","fastmap","forcats","fs","gapminder","generics","ggplot2","glue","graphics","grDevices","grid","gtable","haven","hms","htmltools","htmlwidgets","httpuv","httr","jsonlite","knitr","later","lazyeval","learnr","lifecycle","lubridate","magrittr","markdown","methods","mime","modelr","munsell","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","readxl","reprex","rlang","rmarkdown","rprojroot","rstudioapi","rvest","scales","shiny","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","tools","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.1.5","3.6.1","0.5.3.9000","1.1.0","2.0.2","1.4-1","3.6.1","1.3.4","3.6.1","1.1.0","1.4.2","0.6.25","0.8.4","0.14","0.4.1","1.0.1","0.4.0","1.3.1","0.3.0","0.0.2","3.2.1","1.3.1","3.6.1","3.6.1","3.6.1","0.3.0","2.2.0","0.5.3","0.4.0","1.5.1","1.5.2","1.4.1","1.6.1","1.27","1.0.0","0.2.2","0.10.0","0.1.0","1.7.4","1.5","1.1","3.6.1","0.9","0.1.5","0.5.0","1.4.3","2.0.3","1.1.0","0.3.3","2.4.1","1.0.3","1.3.1","1.3.1","0.3.0","0.4.5","2.1","1.3-2","0.10","0.3.5","1.1.0","1.4.0","3.6.1","1.4.6","1.4.0","2.1.3","1.0.2","1.0.0","1.3.0","3.6.1","3.6.1","0.2.3","2.1.2","0.12","1.2.2","1.8-4","2.2.0"]}]}]}
 </script>
 <!--/html_preserve-->
 </div>
@@ -769,7 +773,7 @@ output$`tutorial-exercise-exercise29-output` <- renderUI({
 
 <!-- begin doc-metadata -->
 <div id="doc-metadata">
-<h2 class="title toc-ignore" style="display:none;">DCU R Tutorials</h2>
+<h2 class="title toc-ignore" style="display:none;">DCU R Tutorial 2</h2>
 <h3 class="subtitle"><em>Data Transformation</em></h3>
 <h4 class="author"><em>by Damien Dupré</em></h4>
 </div>

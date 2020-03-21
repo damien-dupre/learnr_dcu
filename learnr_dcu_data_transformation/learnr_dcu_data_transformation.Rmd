@@ -1,8 +1,10 @@
 ---
-title: "DCU R Tutorials"
+title: "DCU R Tutorial 2"
 subtitle: "Data Transformation"
 author: "by Damien Dupré"
-output: learnr::tutorial
+output:
+  learnr::tutorial:
+    progressive: true
 runtime: shiny_prerendered
 ---
 
@@ -11,12 +13,18 @@ runtime: shiny_prerendered
 knitr::opts_chunk$set(
   scipen = 999,
   echo = FALSE,
-  mmessage = FALSE,
+  message = FALSE,
+  warning = FALSE,
   fig.align='center'
   )
 # libraries --------------------------------------------------------------------
 library(learnr)
 library(tidyverse)
+library(gapminder)
+# environment ------------------------------------------------------------------
+gapminder_wider <- gapminder %>% 
+  select(country, year, pop) %>% 
+  pivot_wider(names_from = year, values_from = pop)
 ```
 
 ```{r img1, out.width = '30%'}
@@ -45,14 +53,20 @@ It is important to remember that the tidyverse is constantly evolving. The best 
 
 Tidy data has a simple convention: put variables in the columns and observations in the rows.
 
-```{r img3, out.width = '30%'}
+```{r img3, out.width = '50%'}
 knitr::include_graphics("https://ohi-science.org/data-science-training/img/tidy_data.png")
 ```
 
 Right now we are going to use `dplyr` to wrangle this tidy-ish data set (the transform part of the cycle), and then come back to tidying messy data using `tidyr` once we’ve had some fun wrangling. These are both part of the `tidyverse` package.
 
-```{r img4, out.width = '30%'}
+```{r img4, out.width = '50%'}
 knitr::include_graphics("https://ohi-science.org/data-science-training/img/r4ds_data-science.png")
+```
+
+As a part of the {tidyverse} package, {dplyr} and {tidyr} are loaded when {tidyverse} is loaded as well:
+
+```{r}
+library(tidyverse)
 ```
 
 Conceptually, making data tidy first is really critical. Instead of building your analyses around whatever (likely weird) format your data are in, take deliberate steps to make your data tidy. When your data are tidy, you can use a growing assortment of powerful analytical and visualization tools instead of inventing home-grown ways to accommodate your data. This will save you time since you aren’t reinventing the wheel, and will make your work more clear and understandable to your collaborators (most importantly, Future You).
@@ -82,10 +96,10 @@ Together these properties make it easy to chain together multiple simple steps t
 ### The gapminder dataset
 
 In February 2006, a Swedish physician and data advocate named Hans Rosling gave a TED talk titled “The best stats you’ve ever seen” where he presented global economic, health, and development data from the website [](www.gapminder.org) . 
-For this tutorial, are going to use a dataset from this website. The dataset is read with the function `read_csv()` from the {readr} package into an object called `gapminder`.
+For this tutorial, are going to use a dataset from this website. The dataset is stored in the {gapminder} package into an object called `gapminder`. We just need to load the package to obtain the `gapminder` dataframe object:
 
-```{r echo=TRUE}
-gapminder <- readr::read_csv('https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv') 
+```{r echo=TRUE, eval=TRUE}
+library(gapminder)
 ```
 
 Have a look at the `gapminder` object structure using the function `str()`:
@@ -96,12 +110,12 @@ Have a look at the `gapminder` object structure using the function `str()`:
 
 Each row in this table corresponds to a country at a specific year. For each row, we have 6 columns:
 
-- country: Name of country.
-- year: Year of the observation (between 1952 and 2007).
-- pop: Number of people living in the country.
-- continent: Which of the five continents the country is part of. Note that “Americas” includes countries in both North and South America and that Antarctica is excluded.
-- lifeExp: Life expectancy in years.
-- gdpPercap: Gross domestic product (in US dollars).
+- **country**: Name of country.
+- **year**: Year of the observation (between 1952 and 2007).
+- **pop**: Number of people living in the country.
+- **continent**: Which of the five continents the country is part of. Note that “Americas” includes countries in both North and South America and that Antarctica is excluded.
+- **lifeExp**: Life expectancy in years.
+- **gdpPercap**: Gross domestic product (in US dollars).
 
 Have a look at the first rows/observations of the `gapminder` object using the function `head()`:
 
@@ -122,10 +136,6 @@ This tutorial uses contents and examples from the following free online books. T
 
 ## Chapter 1: The `filter()` function
 
-```{r img6, out.width = '30%'}
-knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-filter.png")
-```
-
 You will want to isolate bits of your data; maybe you want to only look at a single country or a few years. R calls this subsetting.
 
 `filter()` is a function in the **{dplyr}** package that takes logical expressions and returns the rows for which all are TRUE. Remember your logical expressions? We’ll use `<` and `==` here.
@@ -135,7 +145,7 @@ You will want to isolate bits of your data; maybe you want to only look at a sin
 For example, let's filter the dataset by keeping only the values for Ireland:
 
 ```{r exercise3, exercise=TRUE}
-filter(gaminder, country == "Ireland")
+filter(gapminder, country == "Ireland")
 ```
 
 Note that column names are not between quotation marks in the Tidyverse wherease the value to filter is.
@@ -163,13 +173,13 @@ knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/01f4b6d39d2be8269
 Run the following code to filter both Ireland and France data:
 
 ```{r exercise4, exercise=TRUE}
-filter(gaminder, country == "Ireland" | country == "France")
+filter(gapminder, country == "Ireland" | country == "France")
 ```
 
 Run the following code to filter only Ireland data without the year 2007:
 
 ```{r exercise5, exercise=TRUE}
-filter(gaminder, country == "Ireland" & year != 2007)
+filter(gapminder, country == "Ireland" & year != 2007)
 ```
 
 ### Multiple filters
@@ -177,7 +187,7 @@ filter(gaminder, country == "Ireland" & year != 2007)
 Whereas the `filter()` can include as many conditions as possible, it is also possible to store the result of the `filter()` function in a new object and then to apply a new filter on this new object.
 
 ```{r exercise6, exercise=TRUE}
-gapminder_ireland <- filter(gaminder, country == "Ireland")
+gapminder_ireland <- filter(gapminder, country == "Ireland")
 
 gapminder_ireland_2007 <- filter(gapminder_ireland, year == 2007)
 ```
@@ -200,10 +210,6 @@ A choice is offered to you, you can either overwrite the original object by usin
 
 ## Chapter 2: The `select()` function
 
-```{r img7, out.width = '30%'}
-knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-select.png")
-```
-
 It’s not uncommon to get datasets with hundreds or even thousands of variables. In this case, the first challenge is often narrowing in on the variables you’re actually interested in. `select()` allows you to rapidly zoom in on a useful subset using operations based on the names of the variables. Again the first argument is the name of the data frame object to process and the following arguments are the name of the columns to keep.
 
 `select()` is not terribly useful with the `gapminder` data because we only have 6 variables, but you can still get the general idea:
@@ -221,14 +227,14 @@ gapminder_keep <- select(gapminder, country, year, pop)
 
 gapminder_remove <- select(gapminder, -continent, -lifeExp, -gdpPercap)
 
-gapminder_keep == gapminder_remove
+all.equal(gapminder_keep, gapminder_remove)
 ```
 
 In the previous example the objects `gapminder_keep` abd `gapminder_remove` should have the same number of variable and therefore be equal.
 
 ### Select and rename variables
 
-While you are keeping only specify variables with `select()`, these variables can also be renamed on the same time. It is counterintuitive but the new name has to be first followed by the = sign and the old name such as:
+While you are keeping only specify variables with `select()`, these variables can also be renamed on the same time. It is counterintuitive but the new name has to be first followed by the `=` sign and the old name such as:
 
 ```{r exercise9, exercise=TRUE}
 select(gapminder, country, population = pop, measure_year = year)
@@ -248,12 +254,7 @@ select(gapminder, country, population = pop, measure_year = year)
 
 ```
 
-
 ## Chapter 3: The `mutate()` function
-
-```{r img8, out.width = '30%'}
-knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-mutate.png")
-```
 
 Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. That’s the job of `mutate()`. Once again the first argument is the name of the dataframe object to modify, then the second argument is the name of the column to create followed by the `=` sign and the condition creating the new values.
 
@@ -310,10 +311,6 @@ Base R, as well as the pre-installed R packages and all the others that you can 
 ```
 
 ## Chapter 4: The `summarise()` function
-
-```{r img9, out.width = '30%'}
-knitr::include_graphics("https://ohi-science.org/data-science-training/img/rstudio-cheatsheet-summarise.png")
-```
 
 The last key verb is `summarise()`. It collapses a data frame to a single row:
 
@@ -406,9 +403,9 @@ Behind the scenes, `x %>% f(y)` turns into `f(x, y)`, and `x %>% f(y) %>% g(z)` 
 
 The following sequence can be read as:
 1. Take x then
-2. Use this output as the input to the next function f() then
-3. Use this output as the input to the next function g() then
-4. Use this output as the input to the next function h()
+2. Use x as the input to the function f() then
+3. Use f(x) as the input to the function g() then
+4. Use g(f(x)) as the input to the function h()
 
 ```{r echo=TRUE, eval=FALSE}
 x %>% 
@@ -418,7 +415,7 @@ x %>%
 ```
 
 Working with the pipe is one of the key criteria for belonging to the tidyverse. The only exception is {ggplot2}.
-
+<!--
 ### Missing values
 
 If there’s any missing value in the data used for your summary, the output will be a missing value. A solution for `mean()` and `sd()` is to include the argument `na.rm = TRUE` (can be read as "the action if there is a missing value is to remove it").
@@ -444,7 +441,7 @@ gapminder_with_na %>%
   group_by(year) %>% 
   summarise(m_pop = mean(pop, na.rm = TRUE))
 ```
-
+-->
 ### Exercices
 
 1. From the data frame object `gapminder`, summarise the population average with the `mean()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:
@@ -463,11 +460,19 @@ gapminder_with_na %>%
 
 Sometimes we need to reformat or reshape our data in order to analyze it or visualize it in a specific way. Two tidyverse functions, `pivot_longer()` and `pivot_wider()`, help us to do this.
 
+```{r out.width = '50%'}
+knitr::include_graphics("https://thinkr.fr/wp-content/uploads/pivot.png")
+```
+
 ### Wider
 
 In the `gapminder` dataset, we currently have a column/variable year and the population for the same country is reapeated according multiple rows. This is a "Tidy" format, but sometimes it is handy to have a column per year for the same country: this is a "wide" format. Wide means that the value of a specific variable is spread on multiple columns.
 
 To obtain this wider version of the dataset, it is possible to use the `pivot_wider()` function from the {tidyr} package.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/8350f0dda414629b9d6c354f87acf5c5f722be43/bcb84/images/tidy-8.png")
+```
 
 `pivot_wider()` has 3 main arguments:
 1. The dataset to pivot (but it can be omitted if it follows a pipe operator)
@@ -487,6 +492,10 @@ gapminder_wider
 ### Longer
 
 Usually R is working with long tables, not wide. For this reason it is very useful to reorganise a dataset with the `pivot_longer()` function.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://i0.wp.com/cmdlinetips.com/wp-content/uploads/2020/02/pivot_longer_wide_to_long_tidy.jpg")
+```
 
 `pivot_longer()` has 4 main arguments:
 1. The dataset to pivot (but it can be omitted if it follows a pipe operator)
