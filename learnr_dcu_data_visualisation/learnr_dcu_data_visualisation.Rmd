@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
 # libraries --------------------------------------------------------------------
 library(learnr)
 library(tidyverse)
+library(flipbookr)
 # environment ------------------------------------------------------------------
 gapminder <- 'https://raw.githubusercontent.com/OHI-Science/data-science-training/master/data/gapminder.csv' %>% 
   readr::read_csv() 
@@ -41,6 +42,30 @@ As a part of the {tidyverse} package, {ggplot2} is loaded when {tidyverse} is lo
 ```{r}
 library(tidyverse)
 ```
+
+<!--
+```{r ggplot-demo, echo=TRUE, eval=FALSE}
+ggplot(data = cars) + 
+  aes(x = speed) +
+  aes(y = dist) +
+  geom_point(shape = 21, 
+             alpha = .8,
+             size = 5,
+             color = "white") +
+  aes(fill = dist) +
+  scale_fill_viridis_c(option = "magma", end = .7) +
+  labs(title = "That cars data again!") +
+  theme_minimal() +
+  theme(plot.background = element_rect(fill = "grey95")) 
+```
+
+```{r echo=FALSE, eval=FALSE}
+flipbookr::chunk_gif_flipbook_embed(
+  chunk_name = "ggplot-demo",
+  title = "Side-by-side co-evolution!"
+) 
+```
+-->
 
 ### The gapminder dataset
 
@@ -516,8 +541,31 @@ gapminder %>%
 
 ```
 
-1. Display the relationship between gdpPercap and lifeExp for each year from 2000 and only for european countries
+```{r exercise25-solution}
+gapminder %>% 
+  group_by(year, continent) %>% 
+  summarise(m_exp = mean(lifeExp)) %>% 
+  ggplot(aes(year, m_exp, color = continent)) +
+  geom_line() +
+  scale_y_continuous("Average life expectancy (year)") +
+  scale_x_continuous("") +
+  scale_fill_discrete("Continent") +
+  theme_bw()
+```
+
+2. Display the relationship between gdpPercap and lifeExp for each year from 2000 and only for european countries
 
 ```{r exercise26, exercise=TRUE}
 
+```
+
+```{r exercise26-solution}
+gapminder %>% 
+  filter(continent == "Europe" & year >= 2000) %>% 
+  ggplot(aes(gdpPercap, lifeExp, color = as.factor(year))) +
+  geom_point() +
+  scale_y_continuous("Life expectancy (year)") +
+  scale_x_continuous("GDP per Capita") +
+  scale_color_discrete("") +
+  facet_wrap(~year)
 ```

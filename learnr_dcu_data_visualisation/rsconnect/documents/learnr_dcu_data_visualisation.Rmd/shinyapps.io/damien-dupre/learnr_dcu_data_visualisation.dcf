@@ -5,9 +5,8 @@ account: damien-dupre
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1968198
-bundleId: 2901725
+bundleId: 2928509
 url: https://damien-dupre.shinyapps.io/learnr_dcu_data_visualisation/
-when: 1584707390.36905
+when: 1585246349.46633
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: learnr_dcu_data_visualisation_files/figure-html/exercise10-1.png|learnr_dcu_data_visualisation_files/figure-html/exercise11-1.png|learnr_dcu_data_visualisation_files/figure-html/unnamed-chunk-12-1.png

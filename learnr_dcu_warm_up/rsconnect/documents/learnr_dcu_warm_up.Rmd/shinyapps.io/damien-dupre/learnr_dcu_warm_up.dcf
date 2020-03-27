@@ -5,8 +5,9 @@ account: damien-dupre
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1776569
-bundleId: 2898990
+bundleId: 2932105
 url: https://damien-dupre.shinyapps.io/learnr_dcu_warm_up/
-when: 1584642511.63623
+when: 1585317620.25498
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: style.css

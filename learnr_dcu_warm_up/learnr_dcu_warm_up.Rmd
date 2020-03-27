@@ -371,10 +371,24 @@ The `+` tells you that R is waiting for more input; it doesn’t think you’re 
 
 ```
 
+```{r exercise1-solution}
+my_seq <- seq(1, 10)
+
+my_seq * 2
+```
+
 2. Store the result of the function `seq(1, 10)` in an object with the assigment arrow and store the value 2 in another object with the assigment arrow. Then multiply these two objects:
 
 ```{r exercise2, exercise=TRUE}
 
+```
+
+```{r exercise2-solution}
+my_seq <- seq(1, 10)
+
+val_two <- 2
+
+my_seq * val_two
 ```
 
 ## Chapter 3: Vector Basics
@@ -470,10 +484,26 @@ sin(leinster_county)
 
 ```
 
+```{r exercise3-solution}
+my_details <- c(35, 1.8, 15)
+
+age <- my_details[1]
+
+years_from_lc <- my_details[3]
+
+age - years_from_lc
+```
+
 2. Create a vector containing the names of the 4 provinces of Ireland, store this vector in an object and apply the function `nchar()` to this object:
 
 ```{r exercise4, exercise=TRUE}
 
+```
+
+```{r exercise4-solution, exercise=TRUE}
+provinces <- c("Connaught", "Leinster", "Munster", "Ulster")
+
+nchar(provinces)
 ```
 
 ## Chapter 4: Data Frames
@@ -563,10 +593,22 @@ str(leinster_df)
 
 ```
 
+```{r exercise5-solution, exercise=TRUE}
+leinster_df$population[3]
+#or
+leinster_df[3,3]
+```
+
 2. Print the value of the size of County Kilkenny:
 
 ```{r exercise6, exercise=TRUE}
 
+```
+
+```{r exercise6-solution, exercise=TRUE}
+leinster_df$size[4]
+#or
+leinster_df[4,2]
 ```
 
 ## Conclusion

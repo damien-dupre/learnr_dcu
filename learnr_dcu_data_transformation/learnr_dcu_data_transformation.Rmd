@@ -25,6 +25,10 @@ library(gapminder)
 gapminder_wider <- gapminder %>% 
   select(country, year, pop) %>% 
   pivot_wider(names_from = year, values_from = pop)
+
+gapminder_country <- gapminder %>% 
+  select(year, country, lifeExp) %>% 
+  pivot_wider(names_from = country, values_from = lifeExp)
 ```
 
 ```{r img1, out.width = '30%'}
@@ -108,6 +112,10 @@ Have a look at the `gapminder` object structure using the function `str()`:
 
 ```
 
+```{r exercise1-solution, exercise=TRUE}
+str(gapminder)
+```
+
 Each row in this table corresponds to a country at a specific year. For each row, we have 6 columns:
 
 - **country**: Name of country.
@@ -121,6 +129,10 @@ Have a look at the first rows/observations of the `gapminder` object using the f
 
 ```{r exercise2, exercise=TRUE}
 
+```
+
+```{r exercise2-solution, exercise=TRUE}
+head(gapminder)
 ```
 
 ### References
@@ -202,10 +214,19 @@ A choice is offered to you, you can either overwrite the original object by usin
 
 ```
 
+```{r exercise12-solution, exercise=TRUE}
+filter(gapminder, year == 2007 & pop > 1000000000)
+```
+
+
 2. From the data frame object `gapminder`, filter the countries in Europe which life expectancy is lower than 60 years:
 
 ```{r exercise13, exercise=TRUE}
 
+```
+
+```{r exercise13-solution, exercise=TRUE}
+filter(gapminder, continent == "Europe" & lifeExp < 60)
 ```
 
 ## Chapter 2: The `select()` function
@@ -248,10 +269,20 @@ select(gapminder, country, population = pop, measure_year = year)
 
 ```
 
+```{r exercise14-solution, exercise=TRUE}
+select(gapminder, life_expenctancy = lifeExp, gdp_per_capita = gdpPercap)
+```
+
 2. From the data frame object `gapminder`, remove the columns `pop` and `year` and assign the result in a new object. The display the value of this object:
 
 ```{r exercise15, exercise=TRUE}
 
+```
+
+```{r exercise15-solution, exercise=TRUE}
+new_data <- select(gapminder, -pop, -year)
+
+new_data
 ```
 
 ## Chapter 3: The `mutate()` function
@@ -298,16 +329,27 @@ Base R, as well as the pre-installed R packages and all the others that you can 
 
 ### Exercices
 
-1. From the data frame object `gapminder`, create a new column called `COUNTRY` with the function `toupper()` using the column `country`. But remember, this variable name in capital is NOT a right name in our snake_case conventions:
+1. From the data frame object `gapminder`, create a new column called `COUNTRY` with the function `toupper()` using the column `country`:
 
 ```{r exercise16, exercise=TRUE}
 
+```
+
+```{r exercise16-solution, exercise=TRUE}
+mutate(gapminder, COUNTRY = toupper(country))
+# Warning: this variable name in capital is NOT a right name in our snake_case conventions
 ```
 
 2. From the data frame object `gapminder`, filter the countries in Europe and their values for 2007. Assign the result to an new object called `europe_2007`. Then create a new column called `europe_prop` corresponding to the value of the column `pop` divided by the total population in Europe in 2007.
 
 ```{r exercise17, exercise=TRUE}
 
+```
+
+```{r exercise17-solution, exercise=TRUE}
+europe_2007 <- filter(gapminder, continent == "Europe" & year == 2007)
+
+mutate(europe_2007, europe_prop = pop/sum(europe_prop))
 ```
 
 ## Chapter 4: The `summarise()` function
@@ -334,10 +376,22 @@ summarise(gapminder_by_year, m_pop = mean(pop))
 
 ```
 
+```{r exercise20-solution, exercise=TRUE}
+gapminder_group <- group_by(gapminder, continent, year)
+
+summarise(gapminder_group, m_pop = mean(pop))
+```
+
 2. From the data frame object `gapminder`, summarise the population standard deviation with the `sd()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them):
 
 ```{r exercise21, exercise=TRUE}
 
+```
+
+```{r exercise21-solution, exercise=TRUE}
+gapminder_group <- group_by(gapminder, continent, year)
+
+summarise(gapminder_group, sd_pop = sd(pop))
 ```
 
 Together `group_by()` and `summarise()` provide one of the tools that you’ll use most commonly when working with dplyr: grouped summaries. But before we go any further with this, we need to introduce a powerful new idea: **the pipe**.
@@ -450,10 +504,22 @@ gapminder_with_na %>%
 
 ```
 
+```{r exercise24-solution, exercise=TRUE}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(m_pop = mean(pop))
+```
+
 2. From the data frame object `gapminder`, summarise the population standard deviation with the `sd()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them) and by using the pipe operator:
 
 ```{r exercise25, exercise=TRUE}
 
+```
+
+```{r exercise25-solution, exercise=TRUE}
+gapminder %>% 
+  group_by(continent, year) %>% 
+  summarise(sd_pop = sd(pop))
 ```
 
 ## Chapter 6: Pivot Longer or Wider
@@ -526,16 +592,21 @@ Note that for `pivot_longer()` the new variable are in quotation marks because t
 
 ```
 
-2. From the data frame object `gapminder_country`, `pivot_longer()` the names to `country` and the values to `lifeExp` in order to find the original data:
-
-```{r}
-gapminder_country <- gapminder %>% 
-  select(year, country, lifeExp) %>% 
+```{r exercise28-solution, exercise=TRUE}
+gapminder %>% 
+  select(country, year, lifeExp) %>% 
   pivot_wider(names_from = country, values_from = lifeExp)
 ```
 
+2. From the data frame object `gapminder_country`, `pivot_longer()` the names to `country` and the values to `lifeExp` in order to find the original data:
+
 ```{r exercise29, exercise=TRUE}
 
+```
+
+```{r exercise29-solution, exercise=TRUE}
+gapminder_country %>% 
+  pivot_longer(names_to = "country", values_to = "lifeExp")
 ```
 
 ## Conclusion
