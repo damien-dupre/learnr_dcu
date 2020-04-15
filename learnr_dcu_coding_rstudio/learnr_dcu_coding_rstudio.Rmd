@@ -1,0 +1,203 @@
+---
+title: "DCU R Tutorial 5"
+subtitle: "R Coding in RStudio"
+author: "by Damien Dupré"
+output:
+  learnr::tutorial:
+    progressive: true
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+set.seed(123)
+# options ----------------------------------------------------------------------
+knitr::opts_chunk$set(
+  #cache.extra = rand_seed,
+  scipen = 999,
+  echo = FALSE,
+  message = FALSE,
+  warning = FALSE,
+  fig.align='center'
+  )
+# libraries --------------------------------------------------------------------
+library(learnr)
+library(tidyverse)
+# environment ------------------------------------------------------------------
+```
+
+```{r out.width = '30%'}
+knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
+```
+
+```{css}
+p {text-align: justify;}
+.columns {display: flex;}
+h2 {color: blue;}
+```
+
+## Introduction
+
+Now you have mastered the basics of coding with R, including R's grammar, syntax and vocabulary, you have learnt how to create fancy representations and, most of all, you know how to test hypotheses in R; it is time to dive into the "real" R world.
+
+In the previous tutorials, the R language was setup for you in the exercises sections to practice R quickly and easily. It is now time to setup your own environment!
+
+Because this is a very scary step wich involves to first download and install R on your computer, then to download and install RStudio on your computer, I will suggest you to start easy with an environment already installed with R and RStudion called RStudio Cloud.
+
+### References
+
+Once again, this tutorial uses contents and examples from the following free online books. They are perfect for beginners, feel free to check them out for further information:
+
+- [R for Data Science](https://r4ds.had.co.nz/) by Wickham and Grolemund (2017)
+- [YaRrr! The Pirate’s Guide to R](https://bookdown.org/ndphillips/YaRrr/) by Phillips (2018)
+- [A ModernDive into R and the tidyverse](https://moderndive.com/) by Ismay and Kim (2019)
+- [Learning statistics with R](https://learningstatisticswithr.com/book/) by Navarro (2019)
+- [Getting Used to R, RStudio, and R Markdown](https://rbasics.netlify.com/) by Kennedy (2019)
+- [Introduction to Open Data Science](https://ohi-science.org/data-science-training/) by the Ocean Health Index Team (2019)
+- [PhD Training Workshop: Statistics in R](https://bookdown.org/animestina/R_Manchester/) by Ushakova and Valasek (2019)
+- [Statistical Thinking for the 21st Century](https://statsthinking21.org/) by Poldrack (2020)
+
+### RStudio Cloud
+
+RStudio Cloud is a hosted version of RStudio in the cloud (virtual machine on a remote server) which can be accessed on this website https://rstudio.cloud/ for free. [RStudio has a great video and presentation of all RStudio Cloud details](https://resources.rstudio.com/webinars/teaching-r-online-with-rstudio-cloud) but here we are using RStudio Cloud as a free private proxy for R and RStudio without installing anything. 
+
+This cloud instance of RStudio has only 1 CPU (very low computation power) but it reproduces the exact same interface as the one you can open on your local computer without having to install R and RStudio.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://mine-cetinkaya-rundel.github.io/rstudio-cloud-webinar/img/get-started.png")
+```
+
+To access to RStudio cloud for the first time:
+
+:::::: {.columns}
+::: {.column width="48%"}
+
+1. Go to https://rstudio.cloud/
+2. Sign In with:
+  - email (real or not)
+  - password
+  - first name (real or not)
+  - last name (real or not)
+  
+:::
+::: {.column width="4%"}
+:::
+::: {.column width="48%"}
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://mine-cetinkaya-rundel.github.io/rstudio-cloud-webinar/img/login.png")
+```
+Note: No need to provide your real information if you just want to practice in RStudio.
+:::
+::::::
+
+#### **Once signed in/logged in, you just need to create a new project in order to launch an RStudio session.**
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://mine-cetinkaya-rundel.github.io/rstudio-cloud-webinar/img/landing-1.png")
+```
+
+While you can do pretty much everything you want within base-R, you’ll find that most people these days do their R programming in an application called RStudio. RStudio is a graphical user interface (GUI)-like interface for R that makes programming in R a bit easier. In fact, once you’ve started to use RStudio, you’ll likely never need to open the base R application again.
+
+### RStudio Interface
+
+When you open RStudio, you’ll see the following three windows (also called panes).
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://ohi-science.org/data-science-training/img/RStudio_IDE.png")
+```
+
+- #### Console: R’s Heart
+
+:::::: {.columns}
+::: {.column width="48%"}
+
+The console is the heart of R. Here is where R actually evaluates code. At the beginning of the console you’ll see the character `>`. This is a prompt that tells you that R is ready for new code. You can type code directly into the console after the prompt and get an immediate response. For example, if you type `1+1` into the console and press enter, you’ll see that R immediately gives an output of 2.
+
+The different status of the R console were presented in the DCU R Tutorial 1, don't hesitate to have a second look at it.
+
+:::
+::: {.column width="4%"}
+:::
+::: {.column width="48%"}
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://bookdown.org/ndphillips/YaRrr/images/consoless.png")
+```
+
+:::
+::::::
+
+You can execute code by typing it directly into the Console. However, if you type code into the console, it won’t be saved. And if you make a mistake in typing code into the console, you’d have to re-type everything all over again. Instead, it’s better to write all your code in a document called the Code Editor and presented here after.
+
+- #### Environment: R’s Brain
+
+:::::: {.columns}
+::: {.column width="48%"}
+
+The Environment tab of this panel shows you the names of all the data objects (like vectors, matrices, and dataframes) that you’ve defined in your current R session. 
+
+You can also see information like the number of observations and rows in data objects. 
+
+:::
+::: {.column width="4%"}
+:::
+::: {.column width="48%"}
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://bookdown.org/ndphillips/YaRrr/images/environmentss.png")
+```
+
+:::
+::::::
+
+- #### Files / Plots / Packages / Help
+
+The **Files** panel gives you access to the file directory on your hard drive.
+
+The **Plots** panel (no big surprise), shows all your plots. There are buttons for opening the plot in a separate window and exporting the plot as a pdf or jpeg.
+
+The **Packages** shows a list of all the R packages installed on the local or remote machine and indicates whether or not they are currently loaded.
+
+With the **Help** menu for R functions you can access to essential information to use them. Just have a look at some of them by typing `?` followed by the function name such as:
+
+```{r echo=TRUE, eval=FALSE}
+?lm
+?summary
+```
+
+- #### Code Editor: R's Nervous System
+
+If the Console is the heart and the Environment the brain, the Code Editor pane is definitely the nervous system. It makes the link between all the previous pane and allows the repoduce actions and behaviors.
+
+This pane is not active when you first enter in RStudio and requires the user to create a new file by clicking **File** > **New File** > **R Script**
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://bookdown.org/animestina/R_Manchester/rstudio2.png")
+```
+
+In this R Script, you will be able to write your code and to save your code in a .R document (basically text for R).
+
+Each line corresponds to a command except 
+- if a function is spread on multiple lines until the closing brackets,
+- if a `%>%` operator is used to chain multiple commands, 
+- if a `+` operator is used to add multiple layers to a ggplot.
+
+All text starting with the symbol `#` is not computed and used as a comment to give information.
+
+## Chapter 1: R Script
+
+R Scripts contains the brute code and some comments, that's it. Even if these files can look very raw, they are usually enought to ensure the reproducibility of your analysis, for you at least.
+
+### R Script structure
+
+R Scripts always start with the packages loaded with the `library()` function which are used in your code.
+
+Then some specific options are used. There is an infinity of options to modify but the ones that I find the most important are the following:
+
+```{r echo=TRUE, eval=FALSE}
+options(scipen = 999) # desactivate the scientific numbering stype (e.g., 3.14e-10)
+
+set.seed(123) # is used to replicate the generation of random numbers
+```
+
+One of the most complicated but essential part is opening the data. **In R, you need to use the appropriate function to open the appropiate file.**

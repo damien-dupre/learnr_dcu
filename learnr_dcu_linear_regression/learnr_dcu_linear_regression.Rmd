@@ -47,23 +47,23 @@ knitr::include_graphics("http://hea.ie/assets/uploads/2017/04/DCU-1000x500.jpg")
 ```{css}
 p {text-align: justify;}
 .columns {display: flex;}
-h2 {color: green;}
+h2 {color: blue;}
 ```
 
 ## Introduction
 
 The goal this tutorial is to provide a simple introduction to hypothesis testing with linear regression models for beginner. In the context of this tutorial non-linear model will not be presented. This introduction is also limited to the most common linear regressions models which suppose a Gaussian distribution of the residuals and which does not include random effects. 
 
-we’re going to use models to partition data into patterns and residuals. Strong patterns will hide subtler trends, so we’ll use models to help peel back layers of structure as we explore a dataset.
+We are going to use models to partition data into patterns and residuals. Strong patterns will hide subtler trends, so we’ll use models to help peel back layers of structure as we explore a dataset.
 
 ### Tidyverse framework
 
-Let’s load all the packages needed for this tutorial (this assumes you’ve already installed them). Recall from our discussion in Section 4.4 that loading the tidyverse package by running `library(tidyverse)` loads the following commonly used data science packages all at once:
+Let’s load all the packages needed for this tutorial (this assumes you’ve already installed them). Loading the {tidyverse} package by running `library(tidyverse)` loads the following commonly used data science packages all at once:
 
-- ggplot2 for data visualization
-- dplyr for data wrangling
-- tidyr for converting data to “tidy” format
-- readr for importing spreadsheet data into R
+- {ggplot2} for data visualization
+- {dplyr} for data wrangling
+- {tidyr} for converting data to “tidy” format
+- {readr} for importing spreadsheet data into R
 - As well as the more advanced {purrr}, {tibble}, {stringr}, and {forcats} packages
 
 ### References
@@ -932,14 +932,12 @@ The link between salary and job satisfaction is significantly different than 0 (
 1. Remember the gapminder dataset? Load the package `gapminder` with the `library()` function, use `str()` and `head()` to have a quick look at the dataset. Then test the following hypothesis:
 
 - $H_{A_{1}}$: When countries' population increase, life expectancy increase as well
-- $H_{A_{2}}$: When countries' GDP per capita increase, life expectancy increase as well
-- $H_{A_{2}}$: There is an interaction effect between countries' population and GDP per capita on life expectancy
 
 ```{r exercise8, exercise=TRUE}
 
 ```
 
-2. Test the following hypotheses:
+2. Test the following hypotheses in the same unique:
 
 - $H_{A_{1}}$: When countries' population increase, life expectancy increase as well
 - $H_{A_{2}}$: When countries' GDP per capita increase, life expectancy increase as well
