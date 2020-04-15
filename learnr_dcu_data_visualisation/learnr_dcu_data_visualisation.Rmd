@@ -180,8 +180,8 @@ ggplot(data = my_dataframe) +
 But for the moment let's add a `geom_point()` layer with some mapping. Create a plot frame by using the `ggplot()` with the data argument as `gapminder` object and a `geom_point()` layer with in the mapping argument (`aes()` function) inclunding `gdpPercap` as x and `lifeExp` as y:
 
 ```{r exercise1, exercise=TRUE}
-ggplot(data = ) +
-  geom_point(mapping = aes(x = , y = ))
+ggplot(data = ___) +
+  geom_point(mapping = aes(x = ___, y = ___))
 
 ```
 

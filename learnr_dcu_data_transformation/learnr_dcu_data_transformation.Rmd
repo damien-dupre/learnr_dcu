@@ -204,7 +204,7 @@ gapminder_ireland <- filter(gapminder, country == "Ireland")
 gapminder_ireland_2007 <- filter(gapminder_ireland, year == 2007)
 ```
 
-A choice is offered to you, you can either overwrite the original object by using the same object name or to use a different object name. In this last case, 
+A choice is offered to you, you can either overwrite the original object by using the same object name or to use a different object name.
 
 ### Exercises
 
@@ -449,6 +449,8 @@ gapminder_summary_europe <- gapminder %>%
     m_pop = mean(pop),
     sd_pop = sd(pop)
   )
+
+gapminder_summary_europe
 ```
 
 This focuses on the transformations, not what’s being transformed, which makes the code easier to read. You can read it as a series of imperative statements: group, then summarise, then filter in the first example and: filter, then summarise in the second example. As suggested by this reading, a good way to pronounce `%>%` when reading code is **“then”**.

@@ -253,8 +253,8 @@ ggplot(data = cars) +
   geom_point(mapping = aes(x = my_xaxis_variable, y = my_yaxis_variable))</code></pre>
 <p>But for the moment let’s add a <code>geom_point()</code> layer with some mapping. Create a plot frame by using the <code>ggplot()</code> with the data argument as <code>gapminder</code> object and a <code>geom_point()</code> layer with in the mapping argument (<code>aes()</code> function) inclunding <code>gdpPercap</code> as x and <code>lifeExp</code> as y:</p>
 <div class="tutorial-exercise" data-label="exercise1" data-caption="Code" data-completion="1" data-diagnostics="1" data-startover="1" data-lines="0">
-<pre class="text"><code>ggplot(data = ) +
-  geom_point(mapping = aes(x = , y = ))</code></pre>
+<pre class="text"><code>ggplot(data = ___) +
+  geom_point(mapping = aes(x = ___, y = ___))</code></pre>
 <script type="application/json" data-opts-chunk="1">{"fig.width":6.5,"fig.height":4,"fig.retina":2,"fig.align":"center","fig.keep":"high","fig.show":"asis","out.width":624,"warning":true,"error":false,"message":false,"exercise.df_print":"paged","exercise.checker":"NULL"}</script>
 </div>
 <p>Because <code>gapminder</code> is an object name it doesn’t need quotation mark. Also, because we are still in the tidyverse with {ggplot2}, the name of the columns used for x and y (<code>gdpPercap</code> and <code>lifeExp</code>) don’t need quotation mark neither.</p>
