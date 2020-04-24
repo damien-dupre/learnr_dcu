@@ -368,6 +368,8 @@ gapminder_by_year <- group_by(gapminder, year)
 summarise(gapminder_by_year, m_pop = mean(pop))
 ```
 
+Finally, use `ungroup()` once you are finished with a grouped calculation if you are doing more transformations.
+
 ### Exercices
 
 1. From the data frame object `gapminder`, summarise the population average with the `mean()` function by `year` and by `continent` by adding the second grouping variable after the first one (use a coma to separate them):
@@ -400,6 +402,28 @@ Together `group_by()` and `summarise()` provide one of the tools that you’ll u
 
 ```{r out.width = '30%'}
 knitr::include_graphics("https://magrittr.tidyverse.org/logo.png")
+```
+
+If you have used R before you probably know how to create sequences of integers with the colon (`:`) operator:
+
+```{r echo=TRUE, eval=FALSE}
+1:10
+#  [1]  1  2  3  4  5  6  7  8  9 10
+```
+
+If you wanted to know the sum of all of the numbers between 1 and 10 you might write some code like:
+
+```{r echo=TRUE, eval=FALSE}
+sum(1:10)
+# [1] 55
+```
+
+The Tidyverse makes heavy use of the pipe operator (`%>%`), which takes whatever is on the left-hand-side of the pipe and makes it the first argument of whatever function is on the right-hand-side of the pipe. Therefore `1:10 %>% sum()` is equivalent to `sum(1:10)`.
+
+```{r echo=TRUE, eval=FALSE}
+1:10 %>% sum()
+
+# [1] 55
 ```
 
 Imagine that we want to summarise the population average and standard deviation only of europe only. Using what you know about dplyr, you might write code like this:

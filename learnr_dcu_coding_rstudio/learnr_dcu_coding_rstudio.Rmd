@@ -41,7 +41,7 @@ Now you have mastered the basics of coding with R, including R's grammar, syntax
 
 In the previous tutorials, the R language was setup for you in the exercises sections to practice R quickly and easily. It is now time to setup your own environment!
 
-Because this is a very scary step wich involves to first download and install R on your computer, then to download and install RStudio on your computer, I will suggest you to start easy with an environment already installed with R and RStudion called RStudio Cloud.
+Because this is a very scary step which involves to first download and install R on your computer, then to download and install RStudio on your computer, I will suggest you to start easy with an environment already installed with R and RStudio called RStudio Cloud.
 
 ### References
 
@@ -134,7 +134,7 @@ You can execute code by typing it directly into the Console. However, if you typ
 :::::: {.columns}
 ::: {.column width="48%"}
 
-The Environment tab of this panel shows you the names of all the data objects (like vectors, matrices, and dataframes) that you’ve defined in your current R session. 
+The Environment tab of this panel shows you the names of all the data objects (like vectors, matrices, and data frames) that you’ve defined in your current R session. 
 
 You can also see information like the number of observations and rows in data objects. 
 
@@ -167,7 +167,7 @@ With the **Help** menu for R functions you can access to essential information t
 
 - #### Code Editor: R's Nervous System
 
-If the Console is the heart and the Environment the brain, the Code Editor pane is definitely the nervous system. It makes the link between all the previous pane and allows the repoduce actions and behaviors.
+If the Console is the heart and the Environment the brain, the Code Editor pane is definitely the nervous system. It makes the link between all the previous pane and allows the reproduce actions and behaviours.
 
 This pane is not active when you first enter in RStudio and requires the user to create a new file by clicking **File** > **New File** > **R Script**
 
@@ -186,18 +186,267 @@ All text starting with the symbol `#` is not computed and used as a comment to g
 
 ## Chapter 1: R Script
 
-R Scripts contains the brute code and some comments, that's it. Even if these files can look very raw, they are usually enought to ensure the reproducibility of your analysis, for you at least.
+R Scripts contains the brute code and some comments, that's it. Even if these files can look very raw, they are usually enough to ensure the reproducibility of your analysis, for you at least.
 
 ### R Script structure
 
+- #### Packages used
+
 R Scripts always start with the packages loaded with the `library()` function which are used in your code.
+
+- #### R options and functions
 
 Then some specific options are used. There is an infinity of options to modify but the ones that I find the most important are the following:
 
 ```{r echo=TRUE, eval=FALSE}
-options(scipen = 999) # desactivate the scientific numbering stype (e.g., 3.14e-10)
+options(scipen = 999) # desactivate the scientific numbering stype (e.g., 3.14e-4 becomes 0.000314)
 
 set.seed(123) # is used to replicate the generation of random numbers
 ```
 
-One of the most complicated but essential part is opening the data. **In R, you need to use the appropriate function to open the appropiate file.**
+It is also very easy to create your own functions in R. The best in to store them at the beginning of a script if they are short or to call a R script dedicated to these home made function using `source("C:/path/to/script/function.R")`.
+
+- #### Open your file
+
+If you are working with RStudio Cloud, any kind of local dataset has to be uploaded to the remote cloud instance before being used. 
+
+The easiest is to use the RStudio Cloud interface to do so, in the bottom right pane called `Files` click `upload` and browse your data file to upload it on this remote instance. The data on the could instance become an independent copy of the data on your local computer with any connection between the two (modification on the local version will not be passed on the remote version).
+
+One of the most complicated but essential part is opening the data but RStudio IDE makes it very easy to do. So let's distinguish 2 methods to access to your data:
+
+1. What you can do as a beginner: Open data with RStudio `Import Dataset` function.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://support.rstudio.com/hc/article_attachments/360017332434/Screen_Shot_2018-10-31_at_9.24.22_PM.png")
+```
+
+Remember that .csv files are basically text files.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://support.rstudio.com/hc/article_attachments/360017332574/Screen_Shot_2018-10-31_at_9.39.02_PM.png")
+```
+
+If you see your data in the preview, you can click `Import` to create an object containing your data. A code will be executed on the console, **Copy and Paste the first line of this code in your R script**. You will not have to do it manually once the code is in your script. 
+
+2. What you have to do to ensure code reproducibility: Open data with the appropriate function.
+
+**In R, you need to use a function to open a data file.** There is a function per type of files like `read.csv()` for example (proprietary file type like .xls or .xlsx will need specific packages to access to their open functions).
+
+The main argument of these functions is `file` which corresponds to the path to a file, followed by the name of the file and it extension type such as:
+
+```
+C:/path/to/my/file.csv
+```
+
+will be open in R with the following code:
+
+```{r echo=TRUE, eval=FALSE}
+my_file_object <- read.csv("C:/path/to/my/file.csv")
+```
+
+The following code will generate an error:
+
+```{r echo=TRUE, eval=FALSE}
+# Incomplet path
+my_file_object <- read.csv("/path/to/my/file.csv")
+# Missing file extension
+my_file_object <- read.csv("C:/path/to/my/file")
+# Use of backward slash
+my_file_object <- read.csv("C:\path\to\my\file.csv")
+```
+
+
+It is very important to notice that file paths usually used in windows OS are different than the ones used in iOS or Linux. Windows uses back slash `\` while iOS or Linux are using forward slash `/`. R is also using forward slash `/` and windows users have to manually change them when copy pasting files paths in R.
+
+An opened RStudio session has a default working directory indicated below the console tab name. All the files within this directory can be opened just by using the file name and extension in the read data function. 
+
+```{r echo=TRUE, eval=FALSE}
+my_file_object <- read.csv("file.csv") # If "file.csv" is located in the same directory as RStudio default.
+```
+
+Managing file paths is complicated, therefore the package {here} solves a lot of problem in the case of RStudio used with Projects.
+
+To access to data, an even easier way would be to use a website URL for data stored online instead of file paths.
+
+Even if base R provides basic functions to open a data file, there are also foreign packages that are providing functions to open data files as well such as {readr}, {data.table} or {vroom} for example.
+
+Because we have started in the tidyverse, let's stay in the tidyverse and use the [{readr}](https://readr.tidyverse.org/) and [{readxl}](https://readxl.tidyverse.org/) packages (even if it's not the most efficient ones).
+
+Usually, .xls and .xlsx file formats MUST BE AVOIDED and .csv file formats used instead. The reason is because .csv files are open-source, light weight, and clean whereas .xls and .xlsx have not any of these essential properties.
+
+- #### Save your file
+
+Once the data frame objects are created, the R script can include any kind of data transformation, visualisation and model code.
+
+You can save the R script in the File tab > Save As and remember to use a .R extension.
+
+Data are saved by using a function which takes the name of the data frame object as first argument and the new path as second argument:
+
+```{r echo=TRUE, eval=FALSE}
+write.csv(my_file_object, "C:/path/to/my/new_file.csv")
+```
+
+Using only the name of the file with extension will save it on RStudio's default directory:
+
+```{r echo=TRUE, eval=FALSE}
+write.csv(my_file_object, "new_file.csv")
+```
+
+## Chapter 2: R Markdown
+
+Rmarkdown files are the best way to automatically create a data analytic report such as academic papers, PhD and master dissertation or company's white papers.
+
+Rmarkdown files output are neat, fully reproducible and display all the power of R packages. These output can have different format:
+
+- .doc open as Microsoft Word working document
+- .pdf as LaTex formatted academic manuscript
+- .html as a web page which can contain interactive displays or presentation slides
+
+If you have any question about Rmarkdown files, the online free book ["R Markdown: The Definitive Guide" by Yihui Xie, J. J. Allaire and Garrett Grolemund](https://bookdown.org/yihui/rmarkdown/) might answer it.
+
+To open a Rmarkdown file, use File > New File > RMarkdown… > Document of output format html/pdf/doc and OK (you can also give it a Title like "My report").
+
+Even Rmarkdown file is created with a default content. A good advice would be to click on the `knit` button, which is producing the output document, in order to check that everything is ok form the start.
+
+For example, to create a pdf output, a LaTex processor must be installed before producing any output. There are many LaTex processors available but `tinytex` can be installed directly from RStudio with the {tinytex} package and is recommended.
+
+```{r echo=TRUE, eval=FALSE}
+install.packages('tinytex')
+tinytex::install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex() 
+```
+
+### The 3 parts of a Rmarkdown file
+
+An Rmarkdown document is in fact very simple, it has 3 important parts: the YAML, the text and the code chunks.
+
+It contains three important types of content:
+
+1. An (optional) YAML header surrounded by `---`s.
+2. Text mixed with simple text formatting like `#` heading and `_italics_`.
+3. Chunks of R code surrounded by ` ``` `.
+
+### 1. The YAML
+
+The top part of the file is called the YAML header. YAML is a recursive acronym that stands for “YAML Ain’t Markup Language”. It start and end with `---` and just define the main parameters of your documents such as title and output type.
+
+```
+---
+title: "First RMarkdown"
+author: "Damien Dupré"
+output: html_document
+---
+
+```
+
+According to your type of output, many more parameters can be added to the YAML.
+
+### 2. The text
+
+The text is just plain text using the Markdown language. This is a formatting language for plain text, and there are only about 15 rules to know.
+
+Notice the syntax for:
+
+- headers get rendered at multiple levels: `#`, `##`
+- bold: `**word**`
+
+There are some good cheatsheets to get you started, and here is one built into RStudio: Go to Help > Markdown Quick Reference
+
+Important: note that the hashtag # is used differently in Markdown and in R:
+
+- in R, a hashtag indicates a comment that will not be evaluated. You can use as many as you want: # is equivalent to ######. It’s a matter of style. I use two ## to indicate a comment so that it’s clearer what is a comment versus what I don’t want to run at the moment.
+
+- in Markdown, a hashtag indicates a level of a header. And the number you use matters: # is a “level one header”, meaning the biggest font and the top of the hierarchy. ### is a level three header, and will show up nested below the # and ## headers.
+
+
+### 3. The code
+
+When you open an .Rmd, you get a notebook interface where code and output are interleaved. These codes lines starting and finishing by ` ``` ` are called chunks. The curly brackets are designing the type of language, here `r` and the options to apply to this code chunk.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://smac-group.github.io/ds/images/rmd_code_chunk.png")
+```
+
+You can run each code chunk by clicking the Run icon (it looks like a play button at the top of the chunk), or by pressing Cmd/Ctrl + Shift + Enter. RStudio executes the code and displays the results inline with the code.
+
+When the output document is requested by clicking on the `knit` button, all the chunks are evaluated one after the other and keeps the objects previously stored and libraries loaded in the precedent chunks. For this reason, the first chunk is called `setup` chunk because it contains all the libraries to use and create object from datasets to be processed. 
+
+Importantly a second type of code chunk called inline chunks can be used directly inside a text sentence to print out the result of an object. These inline chunks are between ` `` `  character and starts with the letter r to indicate the computer language used.
+
+```{r}
+my_value <- "`r my_value`"
+```
+
+For example if the object `my_value <- 3` is stored in a previous chunk, an inline chunk containing this object will be:
+
+```
+There are `r my_value` different parts in a Rmarkdown file.
+
+```
+and will be displayed in the output as:
+
+> There are 3 different parts in a Rmarkdown file.
+
+## Chapter 3: Academic outputs
+
+As indicated previously, Rmarkdown files are the perfect tool to create high quality academic outputs.
+
+### Supporting packages
+
+Some packages are making this process even easier by providing templates and functions to help building the best academic outputs. Many of these package are developed and/or maintained by the [R Open Science organisation](https://ropensci.org/) but here only two packages will be presented: {papaja} and {rticles}.
+
+### {papaja}: Reproducible APA manuscripts
+
+Developed and maintained by Frederik Aust & Marius Barth, {papaja} is a fantastic package to produce research manuscript whether you are like APA style or not.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://raw.githubusercontent.com/crsh/papaja/master/inst/images/template_selection.png")
+```
+
+{papaja} is not (yet) on CRAN, and has to be downloaded and installed from github. Thankfully the package {remotes} (as well as the package {devtools}) have a dedicated function called `install_github()` to do it.
+
+```{r echo=TRUE, eval=FALSE}
+install.packages("remotes")
+
+remotes::install_github("crsh/papaja")
+```
+
+After installing {papaja}, you can access a great research manuscript Rmarkdown template in the list of the template proposed (you need to reload the R session for it to appear). This template automatically generate a YAML producing the first page with title, author details, and abstract. The rest of the text written in the Rmarkdown produces a 2-spaced document which can be used as manuscript in many disciplines. 
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://blog.efpsa.org/wp-content/uploads/2015/06/knitting.png")
+```
+
+Similarly as default Rmarkdown, the default APA Rmarkdown template comes with a document that can be knitted for the start to check that your configuration is running fine.
+
+There is also the possibility to insert references in a bibtex format, and to select the style that you prefer.
+
+Finally, the {papaja} package comes with many great functions such as `apa_print()` that has been presented in the Tutorial 4 to present linear models outputs automatically.
+
+### {rticles}: Article Formats for R Markdown
+
+{rticles} can easily be downloaded and installed from CRAN using the `install.packages()` function.
+
+```{r echo=TRUE, eval=FALSE}
+install.packages("rticles")
+```
+
+Once installed and the R session restarted, more than 25 templates (the number keeps increasing) to the most prestigious academic journal can be accessed.
+
+```{r out.width = '50%'}
+knitr::include_graphics("https://bookdown.org/yihui/rmarkdown/images/rticles-templates.png")
+```
+
+To use a template, just use File > New File > RMarkdown… > From Template and select your journal template. Once opened, `knit` the document without modification as a safety check and fill the document with your information, text and code.
+
+Additionally, you can load the {papaja} package to use the `apa_print()` function and to display statistical test results in inline chunks directly in the text.
+
+## Conclusion
+
+In this tutorial, we have seen how to write and structure R code documents to produce the best analyses.
+
+We first have seen that R script are essential to start a project in order to setup a data science pipeline/workflow which includes, data transformation, visualisation and models.
+
+Secondly, we have seen how to create a Rmarkdown file. These Rmarkdown files are one of the best feature of R and has amazing possibilities that I wish you will discover by yourself. To create academic reports, many template are available and very easy to use.
+
+Next steps will be practising, practising and practising as usual. In a R learning journey, I think the next step would be to setup a R project and to connect this project with GitHub. By saving your projects on GitHub, you will setup a professional data science pipeline/workflow which is very efficient!

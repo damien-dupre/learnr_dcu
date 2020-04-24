@@ -114,8 +114,8 @@ Similarly, plots can be divided up into their core components, which come togeth
 Some of the major components are :
 
 - Data
+- Aesthetic Mapping
 - Geometries
-- Mapping
 - Themes
 
 ### Data
@@ -127,6 +127,56 @@ ggplot(data = my_dataframe)
 ```
 
 **In a similar perspective as the pipe operator does, layers in {ggplot2} are added with the symbole `+`.**
+
+### Aesthetic mapping
+
+The **aesthetic mapping** refers to the frame of the plot, `x` for the variable in the x-axis and `y` for the variable in the y-axis. There are many more aesthetics such as `color`, `fill` and `group` but let's focus on the x and y axises for the moment. The mapping is performed by a function in {ggplot2} called `aes()` for aesthetics. 
+
+This is an essential concept to remember, the mapping of a plot (frame axises) is built from aesthetics.
+
+```{r echo=TRUE, eval=FALSE}
+ggplot(data = my_dataframe) +
+  aes(x = my_xaxis_variable, y = my_yaxis_variable)
+```
+
+Because `gapminder` is an object name it doesn't need quotation mark. Also, because we are still in the tidyverse with {ggplot2}, the name of the columns used for x and y (`gdpPercap` and `lifeExp`) don't need quotation mark neither.
+
+Again, the arguments names of the `ggplot()` function and layers can be omitted if filled in the right order:
+
+```{r echo=TRUE, eval=FALSE}
+ggplot(my_dataframe) +
+  aes(my_xaxis_variable, my_yaxis_variable)
+```
+
+Aesthetic mapping represents not only the variables defined as x-axis and y-axis but also, colors of borders (colors), colors of shapes (fill), shapes ...
+
+```{r echo=TRUE, eval=FALSE}
+ggplot(data = my_dataframe) +
+  aes(
+    x = my_xaxis_variable, 
+    y = my_yaxis_variable,
+    color = my_color_variable,
+    fill = my_fill_variable,
+    shape = my_shape_variable,
+    size = my_size_variable
+  )
+```
+
+Try to run the following code which is adding not only a x- and y-axis to a scatterplot, but also colors to the points:
+
+```{r exercise2, exercise=TRUE}
+ggplot(data = gapminder) +
+  aes(x = gdpPercap, y = lifeExp, color = continent) +
+  geom_point()
+```
+
+Instead of using `continent` variable as color mapping, use `continent` variable as shape mapping:
+
+```{r exercise7, exercise=TRUE}
+ggplot(data = gapminder) +
+  aes(x = gdpPercap, y = lifeExp, ... = continent)
+  geom_point()
+```
 
 ### Geometries
 
@@ -141,12 +191,22 @@ ggplot(data = my_dataframe)
 |`geom_boxplot()`  |boxplot  |
 |...               |...      |
 
-The list is very long but here are the main ones. Multiple **geometries** can be added as layers by using the same `+` symbole. 
+The list is very long but here are the main ones. Multiple **geometries** can be added as layers by using the same `+` symbole.
+
+But for the moment let's add a `geom_point()` layer with some mapping. Create a plot frame by using the `ggplot()` with the data argument as `gapminder` object and a `geom_point()` layer with in the mapping argument (`aes()` function) inclunding `gdpPercap` as x and `lifeExp` as y:
+
+```{r exercise1, exercise=TRUE}
+ggplot(data = ___) +
+  aes(x = ___, y = ___) +
+  geom_point()
+
+```
 
 *Example for scatterplots:*
 
 ```{r echo=TRUE, eval=FALSE}
 ggplot(data = my_dataframe) +
+  aes(my_xaxis_variable, my_yaxis_variable) +
   geom_point() 
 ```
 
@@ -154,6 +214,7 @@ ggplot(data = my_dataframe) +
 
 ```{r echo=TRUE, eval=FALSE}
 ggplot(data = my_dataframe) +
+  aes(my_xaxis_variable, my_yaxis_variable) +
   geom_line() 
 ```
 
@@ -161,37 +222,8 @@ ggplot(data = my_dataframe) +
 
 ```{r echo=TRUE, eval=FALSE}
 ggplot(data = my_dataframe) +
+  aes(my_xaxis_variable, my_yaxis_variable) +
   geom_bar() 
-```
-
-By default **geometries** inherit their mapping from the frame aesthetics (the ones in the `ggplot()` function). However it is possible to define specific aesthetics for each layers for more customisation.
-
-### Aesthetic mapping
-
-The **aesthetic mapping** refers to the frame of the plot, `x` for the variable in the x-axis and `y` for the variable in the y-axis. There are many more aesthetics such as `color`, `fill` and `group` but let's focus on the x and y axises for the moment. The mapping is performed by a function in {ggplot2} called `aes()` for aesthetics. 
-
-This is an essential concept to remember, the mapping of a plot (frame axises) is built from aesthetics.
-
-```{r echo=TRUE, eval=FALSE}
-ggplot(data = my_dataframe) +
-  geom_point(mapping = aes(x = my_xaxis_variable, y = my_yaxis_variable))
-```
-
-But for the moment let's add a `geom_point()` layer with some mapping. Create a plot frame by using the `ggplot()` with the data argument as `gapminder` object and a `geom_point()` layer with in the mapping argument (`aes()` function) inclunding `gdpPercap` as x and `lifeExp` as y:
-
-```{r exercise1, exercise=TRUE}
-ggplot(data = ___) +
-  geom_point(mapping = aes(x = ___, y = ___))
-
-```
-
-Because `gapminder` is an object name it doesn't need quotation mark. Also, because we are still in the tidyverse with {ggplot2}, the name of the columns used for x and y (`gdpPercap` and `lifeExp`) don't need quotation mark neither.
-
-Again, the arguments names of the `ggplot()` function and layers can be omitted if filled in the right order:
-
-```{r echo=TRUE, eval=FALSE}
-ggplot(my_dataframe) +
-  geom_point(aes(my_xaxis_variable, my_yaxis_variable))
 ```
 
 Obviously, some type of layer are not suitable for every aesthetics, it depends on how many variables are included and their type (categorical or continuous). 
@@ -200,55 +232,47 @@ Try using `geom_line()`, `geom_bar()` and `geom_boxplot()` with the current ggpl
 
 ```{r exercise3, exercise=TRUE}
 ggplot(data = gapminder) +
+  aes(gdpPercap, lifeExp) +
   geom_line()
-  
-
 ```
 
 ```{r exercise5, exercise=TRUE}
 ggplot(data = gapminder) +
+  aes(gdpPercap, lifeExp) +
   geom_bar()
-  
-
 ```
 
 ```{r exercise6, exercise=TRUE}
 ggplot(data = gapminder) +
+  aes(gdpPercap, lifeExp) +
   geom_boxplot()
-  
-
 ```
 
-Aesthetic mapping represents not only the variables defined as x-axis and y-axis but also, colors of borders (colors), colors of shapes (fill), shapes ...
+By default **geometries** inherit their mapping from the aesthetic layer but the aesthetic layer is usually defined in the data layer with the `mapping` argument. However it is possible to define specific aesthetics for each layers for more customisation.
+
+- #### Basic layer workflow:
 
 ```{r echo=TRUE, eval=FALSE}
 ggplot(data = my_dataframe) +
-  geom_point(mapping = aes(
-    x = my_xaxis_variable, 
-    y = my_yaxis_variable,
-    color = my_color_variable,
-    fill = my_fill_variable,
-    shape = my_shape_variable,
-    size = my_size_variable
-  )
-)
+  aes(my_xaxis_variable, my_yaxis_variable) +
+  geom_point() 
 ```
 
-Try to run the following code which is adding not only a x- and y-axis to a scatterplot, but also colors to the points:
+- #### Common use of the aesthetic mapping (applied to all geometry layers):
 
-```{r exercise2, exercise=TRUE}
-ggplot(data = gapminder) +
-  geom_point(mapping = aes(x = gdpPercap, y = lifeExp, color = continent))
-
+```{r echo=TRUE, eval=FALSE}
+ggplot(data = my_dataframe, mapping = aes(my_xaxis_variable, my_yaxis_variable)) +
+  geom_point() 
 ```
 
-Instead of using `continent` variable as color mapping, use `continent` variable as shape mapping:
+- #### Use of aesthetic mapping in geometry layers:
 
-```{r exercise7, exercise=TRUE}
-ggplot(data = gapminder) +
-  geom_point(mapping = aes(x = gdpPercap, y = lifeExp, ... = continent))
-
+```{r echo=TRUE, eval=FALSE}
+ggplot(data = my_dataframe) +
+  geom_point(mapping = aes(my_xaxis_variable, my_yaxis_variable)) 
 ```
+
+All these 3 codes will produce the exact same output. The first code is the best to understand {ggplot}'s layer approach but the second code is the one usually used. The third code is used if multiple layers have different aesthetic mapping.
 
 We’ll go over other aspects of the grammar of graphics (such as facets, statistics, and coordinates) as they come up. Let’s start visualizing some data by first choosing a theme, which describes all of the non-data ink in our plot, like grid lines and text.
 

@@ -127,7 +127,7 @@ h2 {color: blue;}
 <h2>Introduction</h2>
 <p>Now you have mastered the basics of coding with R, including R’s grammar, syntax and vocabulary, you have learnt how to create fancy representations and, most of all, you know how to test hypotheses in R; it is time to dive into the “real” R world.</p>
 <p>In the previous tutorials, the R language was setup for you in the exercises sections to practice R quickly and easily. It is now time to setup your own environment!</p>
-<p>Because this is a very scary step wich involves to first download and install R on your computer, then to download and install RStudio on your computer, I will suggest you to start easy with an environment already installed with R and RStudion called RStudio Cloud.</p>
+<p>Because this is a very scary step which involves to first download and install R on your computer, then to download and install RStudio on your computer, I will suggest you to start easy with an environment already installed with R and RStudio called RStudio Cloud.</p>
 <div id="section-references" class="section level3">
 <h3>References</h3>
 <p>Once again, this tutorial uses contents and examples from the following free online books. They are perfect for beginners, feel free to check them out for further information:</p>
@@ -195,7 +195,7 @@ h2 {color: blue;}
 </ul>
 <div class="columns">
 <div class="column" style="width:48%;">
-<p>The Environment tab of this panel shows you the names of all the data objects (like vectors, matrices, and dataframes) that you’ve defined in your current R session.</p>
+<p>The Environment tab of this panel shows you the names of all the data objects (like vectors, matrices, and data frames) that you’ve defined in your current R session.</p>
 <p>You can also see information like the number of observations and rows in data objects.</p>
 </div><div class="column" style="width:4%;">
 
@@ -215,12 +215,183 @@ h2 {color: blue;}
 <ul>
 <li><h4 id="section-code-editor-rs-nervous-system">Code Editor: R’s Nervous System</h4></li>
 </ul>
-<p>If the Console is the heart and the Environment the brain, the Code Editor pane is definitely the nervous system. It makes the link between all the previous pane and allows the repoduce actions and behaviors.</p>
+<p>If the Console is the heart and the Environment the brain, the Code Editor pane is definitely the nervous system. It makes the link between all the previous pane and allows the reproduce actions and behaviours.</p>
 <p>This pane is not active when you first enter in RStudio and requires the user to create a new file by clicking <strong>File</strong> &gt; <strong>New File</strong> &gt; <strong>R Script</strong></p>
 <p><img src="https://bookdown.org/animestina/R_Manchester/rstudio2.png" width="50%" style="display: block; margin: auto;" /></p>
 <p>In this R Script, you will be able to write your code and to save your code in a .R document (basically text for R).</p>
 <p>Each line corresponds to a command except - if a function is spread on multiple lines until the closing brackets, - if a <code>%&gt;%</code> operator is used to chain multiple commands, - if a <code>+</code> operator is used to add multiple layers to a ggplot.</p>
-All text starting with the symbol <code>#</code> is not computed and used as a comment to give information. 
+<p>All text starting with the symbol <code>#</code> is not computed and used as a comment to give information.</p>
+</div>
+</div>
+<div id="section-chapter-1-r-script" class="section level2">
+<h2>Chapter 1: R Script</h2>
+<p>R Scripts contains the brute code and some comments, that’s it. Even if these files can look very raw, they are usually enough to ensure the reproducibility of your analysis, for you at least.</p>
+<div id="section-r-script-structure" class="section level3">
+<h3>R Script structure</h3>
+<ul>
+<li><h4 id="section-packages-used">Packages used</h4></li>
+</ul>
+<p>R Scripts always start with the packages loaded with the <code>library()</code> function which are used in your code.</p>
+<ul>
+<li><h4 id="section-r-options-and-functions">R options and functions</h4></li>
+</ul>
+<p>Then some specific options are used. There is an infinity of options to modify but the ones that I find the most important are the following:</p>
+<pre class="r"><code>options(scipen = 999) # desactivate the scientific numbering stype (e.g., 3.14e-4 becomes 0.000314)
+
+set.seed(123) # is used to replicate the generation of random numbers</code></pre>
+<p>It is also very easy to create your own functions in R. The best in to store them at the beginning of a script if they are short or to call a R script dedicated to these home made function using <code>source("C:/path/to/script/function.R")</code>.</p>
+<ul>
+<li><h4 id="section-open-your-file">Open your file</h4></li>
+</ul>
+<p>If you are working with RStudio Cloud, any kind of local dataset has to be uploaded to the remote cloud instance before being used.</p>
+<p>The easiest is to use the RStudio Cloud interface to do so, in the bottom right pane called <code>Files</code> click <code>upload</code> and browse your data file to upload it on this remote instance. The data on the could instance become an independent copy of the data on your local computer with any connection between the two (modification on the local version will not be passed on the remote version).</p>
+<p>One of the most complicated but essential part is opening the data but RStudio IDE makes it very easy to do. So let’s distinguish 2 methods to access to your data:</p>
+<ol style="list-style-type: decimal">
+<li>What you can do as a beginner: Open data with RStudio <code>Import Dataset</code> function.</li>
+</ol>
+<p><img src="https://support.rstudio.com/hc/article_attachments/360017332434/Screen_Shot_2018-10-31_at_9.24.22_PM.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Remember that .csv files are basically text files.</p>
+<p><img src="https://support.rstudio.com/hc/article_attachments/360017332574/Screen_Shot_2018-10-31_at_9.39.02_PM.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>If you see your data in the preview, you can click <code>Import</code> to create an object containing your data. A code will be executed on the console, <strong>Copy and Paste the first line of this code in your R script</strong>. You will not have to do it manually once the code is in your script.</p>
+<ol start="2" style="list-style-type: decimal">
+<li>What you have to do to ensure code reproducibility: Open data with the appropriate function.</li>
+</ol>
+<p><strong>In R, you need to use a function to open a data file.</strong> There is a function per type of files like <code>read.csv()</code> for example (proprietary file type like .xls or .xlsx will need specific packages to access to their open functions).</p>
+<p>The main argument of these functions is <code>file</code> which corresponds to the path to a file, followed by the name of the file and it extension type such as:</p>
+<pre><code>C:/path/to/my/file.csv</code></pre>
+<p>will be open in R with the following code:</p>
+<pre class="r"><code>my_file_object &lt;- read.csv(&quot;C:/path/to/my/file.csv&quot;)</code></pre>
+<p>The following code will generate an error:</p>
+<pre class="r"><code># Incomplet path
+my_file_object &lt;- read.csv(&quot;/path/to/my/file.csv&quot;)
+# Missing file extension
+my_file_object &lt;- read.csv(&quot;C:/path/to/my/file&quot;)
+# Use of backward slash
+my_file_object &lt;- read.csv(&quot;C:\path\to\my\file.csv&quot;)</code></pre>
+<p>It is very important to notice that file paths usually used in windows OS are different than the ones used in iOS or Linux. Windows uses back slash <code>\</code> while iOS or Linux are using forward slash <code>/</code>. R is also using forward slash <code>/</code> and windows users have to manually change them when copy pasting files paths in R.</p>
+<p>An opened RStudio session has a default working directory indicated below the console tab name. All the files within this directory can be opened just by using the file name and extension in the read data function.</p>
+<pre class="r"><code>my_file_object &lt;- read.csv(&quot;file.csv&quot;) # If &quot;file.csv&quot; is located in the same directory as RStudio default.</code></pre>
+<p>Managing file paths is complicated, therefore the package {here} solves a lot of problem in the case of RStudio used with Projects.</p>
+<p>To access to data, an even easier way would be to use a website URL for data stored online instead of file paths.</p>
+<p>Even if base R provides basic functions to open a data file, there are also foreign packages that are providing functions to open data files as well such as {readr}, {data.table} or {vroom} for example.</p>
+<p>Because we have started in the tidyverse, let’s stay in the tidyverse and use the <a href="https://readr.tidyverse.org/">{readr}</a> and <a href="https://readxl.tidyverse.org/">{readxl}</a> packages (even if it’s not the most efficient ones).</p>
+<p>Usually, .xls and .xlsx file formats MUST BE AVOIDED and .csv file formats used instead. The reason is because .csv files are open-source, light weight, and clean whereas .xls and .xlsx have not any of these essential properties.</p>
+<ul>
+<li><h4 id="section-save-your-file">Save your file</h4></li>
+</ul>
+<p>Once the data frame objects are created, the R script can include any kind of data transformation, visualisation and model code.</p>
+<p>You can save the R script in the File tab &gt; Save As and remember to use a .R extension.</p>
+<p>Data are saved by using a function which takes the name of the data frame object as first argument and the new path as second argument:</p>
+<pre class="r"><code>write.csv(my_file_object, &quot;C:/path/to/my/new_file.csv&quot;)</code></pre>
+<p>Using only the name of the file with extension will save it on RStudio’s default directory:</p>
+<pre class="r"><code>write.csv(my_file_object, &quot;new_file.csv&quot;)</code></pre>
+</div>
+</div>
+<div id="section-chapter-2-r-markdown" class="section level2">
+<h2>Chapter 2: R Markdown</h2>
+<p>Rmarkdown files are the best way to automatically create a data analytic report such as academic papers, PhD and master dissertation or company’s white papers.</p>
+<p>Rmarkdown files output are neat, fully reproducible and display all the power of R packages. These output can have different format:</p>
+<ul>
+<li>.doc open as Microsoft Word working document</li>
+<li>.pdf as LaTex formatted academic manuscript</li>
+<li>.html as a web page which can contain interactive displays or presentation slides</li>
+</ul>
+<p>If you have any question about Rmarkdown files, the online free book <a href="https://bookdown.org/yihui/rmarkdown/">“R Markdown: The Definitive Guide” by Yihui Xie, J. J. Allaire and Garrett Grolemund</a> might answer it.</p>
+<p>To open a Rmarkdown file, use File &gt; New File &gt; RMarkdown… &gt; Document of output format html/pdf/doc and OK (you can also give it a Title like “My report”).</p>
+<p>Even Rmarkdown file is created with a default content. A good advice would be to click on the <code>knit</code> button, which is producing the output document, in order to check that everything is ok form the start.</p>
+<p>For example, to create a pdf output, a LaTex processor must be installed before producing any output. There are many LaTex processors available but <code>tinytex</code> can be installed directly from RStudio with the {tinytex} package and is recommended.</p>
+<pre class="r"><code>install.packages(&#39;tinytex&#39;)
+tinytex::install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex() </code></pre>
+<div id="section-the-3-parts-of-a-rmarkdown-file" class="section level3">
+<h3>The 3 parts of a Rmarkdown file</h3>
+<p>An Rmarkdown document is in fact very simple, it has 3 important parts: the YAML, the text and the code chunks.</p>
+<p>It contains three important types of content:</p>
+<ol style="list-style-type: decimal">
+<li>An (optional) YAML header surrounded by <code>---</code>s.</li>
+<li>Text mixed with simple text formatting like <code>#</code> heading and <code>_italics_</code>.</li>
+<li>Chunks of R code surrounded by <code>```</code>.</li>
+</ol>
+</div>
+<div id="section-the-yaml" class="section level3">
+<h3>1. The YAML</h3>
+<p>The top part of the file is called the YAML header. YAML is a recursive acronym that stands for “YAML Ain’t Markup Language”. It start and end with <code>---</code> and just define the main parameters of your documents such as title and output type.</p>
+<pre><code>---
+title: &quot;First RMarkdown&quot;
+author: &quot;Damien Dupré&quot;
+output: html_document
+---
+</code></pre>
+<p>According to your type of output, many more parameters can be added to the YAML.</p>
+</div>
+<div id="section-the-text" class="section level3">
+<h3>2. The text</h3>
+<p>The text is just plain text using the Markdown language. This is a formatting language for plain text, and there are only about 15 rules to know.</p>
+<p>Notice the syntax for:</p>
+<ul>
+<li>headers get rendered at multiple levels: <code>#</code>, <code>##</code></li>
+<li>bold: <code>**word**</code></li>
+</ul>
+<p>There are some good cheatsheets to get you started, and here is one built into RStudio: Go to Help &gt; Markdown Quick Reference</p>
+<p>Important: note that the hashtag # is used differently in Markdown and in R:</p>
+<ul>
+<li><p>in R, a hashtag indicates a comment that will not be evaluated. You can use as many as you want: # is equivalent to ######. It’s a matter of style. I use two ## to indicate a comment so that it’s clearer what is a comment versus what I don’t want to run at the moment.</p></li>
+<li><p>in Markdown, a hashtag indicates a level of a header. And the number you use matters: # is a “level one header”, meaning the biggest font and the top of the hierarchy. ### is a level three header, and will show up nested below the # and ## headers.</p></li>
+</ul>
+</div>
+<div id="section-the-code" class="section level3">
+<h3>3. The code</h3>
+<p>When you open an .Rmd, you get a notebook interface where code and output are interleaved. These codes lines starting and finishing by <code>```</code> are called chunks. The curly brackets are designing the type of language, here <code>r</code> and the options to apply to this code chunk.</p>
+<p><img src="https://smac-group.github.io/ds/images/rmd_code_chunk.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>You can run each code chunk by clicking the Run icon (it looks like a play button at the top of the chunk), or by pressing Cmd/Ctrl + Shift + Enter. RStudio executes the code and displays the results inline with the code.</p>
+<p>When the output document is requested by clicking on the <code>knit</code> button, all the chunks are evaluated one after the other and keeps the objects previously stored and libraries loaded in the precedent chunks. For this reason, the first chunk is called <code>setup</code> chunk because it contains all the libraries to use and create object from datasets to be processed.</p>
+<p>Importantly a second type of code chunk called inline chunks can be used directly inside a text sentence to print out the result of an object. These inline chunks are between <code>``</code> character and starts with the letter r to indicate the computer language used.</p>
+<p>For example if the object <code>my_value &lt;- 3</code> is stored in a previous chunk, an inline chunk containing this object will be:</p>
+<pre><code>There are `r my_value` different parts in a Rmarkdown file.
+</code></pre>
+<p>and will be displayed in the output as:</p>
+<blockquote>
+<p>There are 3 different parts in a Rmarkdown file.</p>
+</blockquote>
+</div>
+</div>
+<div id="section-chapter-3-academic-outputs" class="section level2">
+<h2>Chapter 3: Academic outputs</h2>
+<p>As indicated previously, Rmarkdown files are the perfect tool to create high quality academic outputs.</p>
+<div id="section-supporting-packages" class="section level3">
+<h3>Supporting packages</h3>
+<p>Some packages are making this process even easier by providing templates and functions to help building the best academic outputs. Many of these package are developed and/or maintained by the <a href="https://ropensci.org/">R Open Science organisation</a> but here only two packages will be presented: {papaja} and {rticles}.</p>
+</div>
+<div id="section-papaja-reproducible-apa-manuscripts" class="section level3">
+<h3>{papaja}: Reproducible APA manuscripts</h3>
+<p>Developed and maintained by Frederik Aust &amp; Marius Barth, {papaja} is a fantastic package to produce research manuscript whether you are like APA style or not.</p>
+<p><img src="https://raw.githubusercontent.com/crsh/papaja/master/inst/images/template_selection.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>{papaja} is not (yet) on CRAN, and has to be downloaded and installed from github. Thankfully the package {remotes} (as well as the package {devtools}) have a dedicated function called <code>install_github()</code> to do it.</p>
+<pre class="r"><code>install.packages(&quot;remotes&quot;)
+
+remotes::install_github(&quot;crsh/papaja&quot;)</code></pre>
+<p>After installing {papaja}, you can access a great research manuscript Rmarkdown template in the list of the template proposed (you need to reload the R session for it to appear). This template automatically generate a YAML producing the first page with title, author details, and abstract. The rest of the text written in the Rmarkdown produces a 2-spaced document which can be used as manuscript in many disciplines.</p>
+<p><img src="https://blog.efpsa.org/wp-content/uploads/2015/06/knitting.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>Similarly as default Rmarkdown, the default APA Rmarkdown template comes with a document that can be knitted for the start to check that your configuration is running fine.</p>
+<p>There is also the possibility to insert references in a bibtex format, and to select the style that you prefer.</p>
+<p>Finally, the {papaja} package comes with many great functions such as <code>apa_print()</code> that has been presented in the Tutorial 4 to present linear models outputs automatically.</p>
+</div>
+<div id="section-rticles-article-formats-for-r-markdown" class="section level3">
+<h3>{rticles}: Article Formats for R Markdown</h3>
+<p>{rticles} can easily be downloaded and installed from CRAN using the <code>install.packages()</code> function.</p>
+<pre class="r"><code>install.packages(&quot;rticles&quot;)</code></pre>
+<p>Once installed and the R session restarted, more than 25 templates (the number keeps increasing) to the most prestigious academic journal can be accessed.</p>
+<p><img src="https://bookdown.org/yihui/rmarkdown/images/rticles-templates.png" width="50%" style="display: block; margin: auto;" /></p>
+<p>To use a template, just use File &gt; New File &gt; RMarkdown… &gt; From Template and select your journal template. Once opened, <code>knit</code> the document without modification as a safety check and fill the document with your information, text and code.</p>
+<p>Additionally, you can load the {papaja} package to use the <code>apa_print()</code> function and to display statistical test results in inline chunks directly in the text.</p>
+</div>
+</div>
+<div id="section-conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In this tutorial, we have seen how to write and structure R code documents to produce the best analyses.</p>
+<p>We first have seen that R script are essential to start a project in order to setup a data science pipeline/workflow which includes, data transformation, visualisation and models.</p>
+<p>Secondly, we have seen how to create a Rmarkdown file. These Rmarkdown files are one of the best feature of R and has amazing possibilities that I wish you will discover by yourself. To create academic reports, many template are available and very easy to use.</p>
+Next steps will be practising, practising and practising as usual. In a R learning journey, I think the next step would be to setup a R project and to connect this project with GitHub. By saving your projects on GitHub, you will setup a professional data science pipeline/workflow which is very efficient! 
 <script type="application/shiny-prerendered" data-context="server-start">
 set.seed(123)
 # options ----------------------------------------------------------------------
@@ -251,7 +422,6 @@ learnr:::register_http_handlers(session, metadata = NULL)
 {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76]}},"value":[{"type":"character","attributes":{},"value":["assertthat","backports","base","broom","cellranger","cli","colorspace","compiler","crayon","datasets","DBI","dbplyr","digest","dplyr","evaluate","fansi","fastmap","forcats","fs","generics","ggplot2","glue","graphics","grDevices","grid","gtable","haven","hms","htmltools","htmlwidgets","httpuv","httr","jsonlite","knitr","later","lazyeval","learnr","lifecycle","lubridate","magrittr","markdown","methods","mime","modelr","munsell","pillar","pkgconfig","promises","purrr","R6","Rcpp","readr","readxl","reprex","rlang","rmarkdown","rprojroot","rstudioapi","rvest","scales","shiny","stats","stringi","stringr","tibble","tidyr","tidyselect","tidyverse","tools","utils","vctrs","withr","xfun","xml2","xtable","yaml"]},{"type":"character","attributes":{},"value":["0.2.1","1.1.5","3.6.1","0.5.3.9000","1.1.0","2.0.2","1.4-1","3.6.1","1.3.4","3.6.1","1.1.0","1.4.2","0.6.25","0.8.5","0.14","0.4.1","1.0.1","0.4.0","1.3.1","0.0.2","3.2.1","1.3.2","3.6.1","3.6.1","3.6.1","0.3.0","2.2.0","0.5.3","0.4.0","1.5.1","1.5.2","1.4.1","1.6.1","1.28","1.0.0","0.2.2","0.10.0","0.2.0","1.7.4","1.5","1.1","3.6.1","0.9","0.1.5","0.5.0","1.4.3","2.0.3","1.1.0","0.3.3","2.4.1","1.0.3","1.3.1","1.3.1","0.3.0","0.4.5","2.1","1.3-2","0.10","0.3.5","1.1.0","1.4.0","3.6.1","1.4.6","1.4.0","2.1.3","1.0.2","1.0.0","1.3.0","3.6.1","3.6.1","0.2.4","2.1.2","0.12","1.2.2","1.8-4","2.2.0"]}]}]}
 </script>
 <!--/html_preserve-->
-</div>
 </div>
 
 </div> <!-- topics -->
